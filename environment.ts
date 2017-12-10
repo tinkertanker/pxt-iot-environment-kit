@@ -4,14 +4,6 @@
  * Read more at https://makecode.microbit.org/blocks/custom
  */
 
-enum MyEnum {
-    //% block="one"
-    One,
-    //% block="two"
-    Two
-}
-
-
 
 /**
  * Custom blocks
@@ -131,53 +123,7 @@ namespace Environment_IoT {
         return pm10;
     }
 
-    /**
-     * TODO: describe your function here
-     * @param dht11pin describe parameter here, eg: DigitalPin.P0
-     */
-    //% blockId="readhumidity" block="read humidity at pin %dht11pin"
-    export function ReadHumidity(dht11pin: DigitalPin): number {
-        let humidity = 0
-        let runtime = 0
-
-        pins.digitalWritePin(dht11pin, 0)
-        basic.pause(18)
-        pins.digitalWritePin(dht11pin, 1)
-        control.waitMicros(40)
-        pins.digitalWritePin(dht11pin, 0)
-
-        //等待高电平响应
-        while (pins.digitalReadPin(dht11pin) != 1) {
-        }
-        //等待低电平响应
-        while (pins.digitalReadPin(dht11pin) != 0) {
-        }
-
-        for (let i = 0; i < 40; i++) {
-            while (pins.digitalReadPin(DigitalPin.P0) == 0) {
-            }
-            runtime = input.runningTimeMicros()
-            while (pins.digitalReadPin(DigitalPin.P0) == 1) {
-            }
-            runtime = input.runningTimeMicros() - runtime
-            if (runtime >= 50) {
-                dht11buf.push(1)
-            } else {
-                dht11buf.push(0)
-            }
-        }
-        humidity = dht11buf[0] * 128
-            + dht11buf[1] * 64
-            + dht11buf[2] * 32
-            + dht11buf[3] * 16
-            + dht11buf[4] * 8
-            + dht11buf[5] * 4
-            + dht11buf[6] * 2
-            + dht11buf[7];
-
-        humidity = 0
-        return humidity;
-    }
+    
 
 
 
