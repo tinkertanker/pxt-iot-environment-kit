@@ -1,7 +1,7 @@
 {
     "name": "Environment_IoT",
     "version": "1.0.0",
-    "description": "Environment package by ELECFREAKS and CLASSROOM",
+    "description": "Environment IoT package by ELECFREAKS and CLASSROOM",
     "license": "MIT",
     "dependencies": {
         "core": "*",
