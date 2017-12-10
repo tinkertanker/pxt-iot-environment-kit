@@ -1,5 +1,5 @@
 {
-    "name": "Untitled",
+    "name": "Environment_IoT",
     "dependencies": {
         "core": "*",
         "radio": "*",
@@ -8,7 +8,7 @@
     "description": "",
     "files": [
         "main.blocks",
-        "main.ts",
+        "environment.ts",
         "README.md"
     ]
 }
