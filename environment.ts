@@ -100,8 +100,7 @@ namespace Environment_IoT {
     
     /**
      * TODO: get pm10(μg/m³)
-     * @param pm10pin describe parameter here, eg: DigitalPin.P12
-     */
+     * @param pm10pin describe parameter here, eg: DigitalPin.P12     */
     //% blockId="readpm10" block="read pm10(μg/m³) at pin %pm10pin"
     export function ReadPM10(pm10pin: DigitalPin): number {
         let pm10 = 0
@@ -120,10 +119,10 @@ namespace Environment_IoT {
     
     
     /**
-    * TODO: get soil humidit(%)
+    * TODO: get soil humidit(0~100)
     * @param soilhumiditypin describe parameter here, eg: AnalogPin.P3
     */
-    //% blockId="readsoilhumidity" block="read soil humidity(\%) at pin %soilhumiditypin"
+    //% blockId="readsoilhumidity" block="read soil humidity at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilhumiditypin: AnalogPin): number {
         let voltage = 0;
         let soilhumidity = 0;
