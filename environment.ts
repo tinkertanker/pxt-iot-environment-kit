@@ -148,7 +148,7 @@ namespace Environment_IoT {
     * TODO: get wind speed(m/s)
     * @param windspeedpin describe parameter here, eg: AnalogPin.P4
     */
-    //% blockId="readwindspeed" block="read wind speedpin(m/s) at pin %windspeedpin"
+    //% blockId="readwindspeed" block="read wind speed(m/s) at pin %windspeedpin"
     export function ReadWindSpeed(windspeedpin: AnalogPin): number {
         let voltage = 0;
         let windspeed = 0;
