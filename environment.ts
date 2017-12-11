@@ -125,6 +125,30 @@ namespace Environment_IoT {
         return pm10;
     }
     
+    /**
+    * Read DHT11 Humidity
+    */
+    //% blockId="readHumidity" block="Read DHT11 Humidity at P0"
+    //% weight=5
+    export function ReadHumidity(DHT11pin: AnalogPin): number {
+        let humidity=0
+        humidity = minode.DHTGetHumidity(0)
+        return humidity;
+    }
+    
+    
+    /**
+    * Read DHT11 Temperature
+    */
+    //% blockId="readTemperature" block="Read DHT11 Temperature at P0"
+    //% weight=5
+    export function ReadTemperature(DHT11pin: AnalogPin): number {
+
+        let temp = 0
+        temp = minode.DHTGetTemperature(ConnName.A0, DHTTemStyle.MINODE_DHT_CELSIUS)
+        return temp;
+    }
+    
    
     
 
