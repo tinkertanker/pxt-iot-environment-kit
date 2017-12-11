@@ -98,7 +98,6 @@ namespace Environment_IoT {
         }
         pm25 = input.runningTimeMicros() - pm25
         pm25 = pm25 / 1000 - 2
-
         return pm25;
     }
 
@@ -130,7 +129,7 @@ namespace Environment_IoT {
     */
     //% blockId="readHumidity" block="Read DHT11 Humidity at P0"
     //% weight=5
-    export function ReadHumidity(DHT11pin: AnalogPin): number {
+    export function ReadHumidity(): number {
         let humidity=0
         humidity = minode.DHTGetHumidity(0)
         return humidity;
@@ -142,8 +141,7 @@ namespace Environment_IoT {
     */
     //% blockId="readTemperature" block="Read DHT11 Temperature at P0"
     //% weight=5
-    export function ReadTemperature(DHT11pin: AnalogPin): number {
-
+    export function ReadTemperature(): number {
         let temp = 0
         temp = minode.DHTGetTemperature(ConnName.A0, DHTTemStyle.MINODE_DHT_CELSIUS)
         return temp;
