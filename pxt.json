@@ -6,8 +6,7 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot#266dfe7ce49b47ddfb6b96ac2ccc0ee7085d0597",
-        "minode": "github:minodekit/pxt-minode"
+        "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot#266dfe7ce49b47ddfb6b96ac2ccc0ee7085d0597"
     },
     "files": [
       
