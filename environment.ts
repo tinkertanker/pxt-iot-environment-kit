@@ -65,6 +65,8 @@ namespace Environment_IoT {
         let voltage = 0;
         let Temperature = 0;
 
+
+        
         voltage = pins.map(
             pins.analogReadPin(temppin),
             0,
@@ -122,7 +124,8 @@ namespace Environment_IoT {
 
         return pm10;
     }
-
+    
+   
     
 
 
