@@ -125,9 +125,9 @@ namespace Environment_IoT {
     
     /**
     * TODO: get soil moisture(0~100)
-    * @param soilhumiditypin describe parameter here, eg: AnalogPin.P3
+    * @param soilmoisturepin describe parameter here, eg: AnalogPin.P3
     */
-    //% blockId="readsoilhumidity" block="read soil moisture at pin %soilhumiditypin"
+    //% blockId="readsoilmoisture" block="read soil moisture at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilmoisturepin: AnalogPin): number {
         let voltage = 0;
         let soilmoisture = 0;
