@@ -20,7 +20,8 @@ namespace Environment_IoT {
      * TODO: describe your function here
      * @param vLED describe parameter here, eg: DigitalPin.P10
      * @param vo describe parameter here, eg: AnalogPin.P1
-     */
+
+*/
     //% blockId="dust_init" block="dust sensor init at vLED %vLED| vo %vo"
     //export function initiotkit(n: number, s: string, e: MyEnum): void {
     export function initdust(vLED: DigitalPin, vo: AnalogPin): void {
@@ -52,6 +53,9 @@ namespace Environment_IoT {
             5000
         );
         dust = (voltage - 580) * 5 / 29;
+        if (dust < 0){
+            dust = 0
+        }
         return dust;
     }
     
