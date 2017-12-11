@@ -12,6 +12,7 @@
 namespace Environment_IoT {
     let dustvled = DigitalPin.P10
     let dustvo = AnalogPin.P1
+    let reference_voltage = 3300
 
 
 
@@ -48,7 +49,7 @@ namespace Environment_IoT {
             0,
             1023,
             0,
-            4650
+            reference_voltage*1.5
         );
         dust = (voltage - 580) * 5 / 29;
         return dust;
@@ -69,7 +70,7 @@ namespace Environment_IoT {
             0,
             1023,
             0,
-            3100
+            reference_voltage
         );
         Temperature = (voltage - 500) / 10;
         return Temperature;
@@ -152,7 +153,7 @@ namespace Environment_IoT {
             0,
             1023,
             0,
-            3100
+            reference_voltage
         );
         windspeed = voltage / 40;
         return windspeed;
