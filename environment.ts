@@ -76,6 +76,7 @@ namespace Environment_IoT {
         return Temperature;
     }
 
+    
     /**
      * TODO: describe your function here
      * @param pm25pin describe parameter here, eg: DigitalPin.P11
@@ -119,6 +120,46 @@ namespace Environment_IoT {
         pm10 = pm10 / 1000 - 2
 
         return pm10;
+    }
+    
+    
+    /**
+    * TODO: get soil humidit
+    * @param soilhumiditypin describe parameter here, eg: AnalogPin.P3
+    */
+    //% blockId="readsoilhumidity" block="read soil humidity at pin %temp"
+    export function ReadSoilHumidity(soilhumiditypin: AnalogPin): number {
+        let voltage = 0;
+        let soilhumidity = 0;
+        voltage = pins.map(
+            pins.analogReadPin(soilhumiditypin),
+            0,
+            1023,
+            0,
+            100
+        );
+        soilhumidity = voltage;
+        return soilhumidity;
+    }
+
+
+    /**
+    * TODO: get wind speed
+    * @param windspeedpin describe parameter here, eg: AnalogPin.P4
+    */
+    //% blockId="readsoilhumidity" block="read wind speedpin(m/s) at pin %windspeedpin"
+    export function ReadWindSpeed(windspeedpin: AnalogPin): number {
+        let voltage = 0;
+        let windspeed = 0;
+        voltage = pins.map(
+            pins.analogReadPin(windspeedpin),
+            0,
+            1023,
+            0,
+            3100
+        );
+        windspeed = voltage/40;
+        return windspeed;
     }
     
 
