@@ -13,10 +13,7 @@ namespace Environment_IoT {
     let dustvled = DigitalPin.P10
     let dustvo = AnalogPin.P1
 
-    let wifiTX = SerialPin.P8
-    let wifiRX = SerialPin.P2
 
-    let dht11buf: number[] = []
 
     /**
      * TODO: describe your function here
