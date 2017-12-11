@@ -49,7 +49,7 @@ namespace Environment_IoT {
             0,
             1023,
             0,
-            reference_voltage*1.5
+            5000
         );
         dust = (voltage - 580) * 5 / 29;
         return dust;
