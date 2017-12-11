@@ -27,6 +27,7 @@ namespace Environment_IoT {
         dustvo = vo
         // Add code here
     }
+    
 
 
     /**
@@ -52,6 +53,8 @@ namespace Environment_IoT {
         dust = (voltage - 580) * 5 / 29;
         return dust;
     }
+    
+    
 
     /**
      * TODO: get TMP36 Temperature(℃)
@@ -71,6 +74,7 @@ namespace Environment_IoT {
         Temperature = (voltage - 500) / 10;
         return Temperature;
     }
+    
 
     
     /**
@@ -91,6 +95,7 @@ namespace Environment_IoT {
         pm25 = pm25 / 1000 - 2
         return pm25;
     }
+    
 
     
     /**
@@ -101,20 +106,17 @@ namespace Environment_IoT {
     export function ReadPM10(pm10pin: DigitalPin): number {
         let pm10 = 0
         while (pins.digitalReadPin(pm10pin) != 0) {
-
         }
         while (pins.digitalReadPin(pm10pin) != 1) {
-
         }
         pm10 = input.runningTimeMicros()
         while (pins.digitalReadPin(pm10pin) != 0) {
-
         }
         pm10 = input.runningTimeMicros() - pm10
         pm10 = pm10 / 1000 - 2
-
         return pm10;
     }
+    
     
     
     /**
@@ -135,6 +137,7 @@ namespace Environment_IoT {
         soilhumidity = voltage;
         return soilhumidity;
     }
+    
 
 
     /**
