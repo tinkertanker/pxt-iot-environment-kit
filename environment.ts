@@ -57,7 +57,7 @@ namespace Environment_IoT {
      * TODO: describe your function here
      * @param temppin describe parameter here, eg: AnalogPin.P0
      */
-    //% blockId="readtemp" block="read temperature at pin %temp"
+    //% blockId="readtemp" block="read temperature at pin %temppin"
     export function ReadTemperature(temppin: AnalogPin): number {
         let voltage = 0;
         let Temperature = 0;
@@ -81,7 +81,7 @@ namespace Environment_IoT {
      * TODO: describe your function here
      * @param pm25pin describe parameter here, eg: DigitalPin.P11
      */
-    //% blockId="readpm25" block="read pm2.5 at pin %temp"
+    //% blockId="readpm25" block="read pm2.5 at pin %pm25pin"
     export function ReadPM25(pm25pin: DigitalPin): number {
         let pm25 = 0
         while (pins.digitalReadPin(pm25pin) != 0) {
@@ -103,7 +103,7 @@ namespace Environment_IoT {
      * TODO: describe your function here
      * @param pm10pin describe parameter here, eg: DigitalPin.P12
      */
-    //% blockId="readpm10" block="read pm10 at pin %temp"
+    //% blockId="readpm10" block="read pm10 at pin %pm10pin"
     export function ReadPM10(pm10pin: DigitalPin): number {
         let pm10 = 0
         while (pins.digitalReadPin(pm10pin) != 0) {
@@ -127,7 +127,7 @@ namespace Environment_IoT {
     * TODO: get soil humidit
     * @param soilhumiditypin describe parameter here, eg: AnalogPin.P3
     */
-    //% blockId="readsoilhumidity" block="read soil humidity at pin %temp"
+    //% blockId="readsoilhumidity" block="read soil humidity at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilhumiditypin: AnalogPin): number {
         let voltage = 0;
         let soilhumidity = 0;
@@ -147,7 +147,7 @@ namespace Environment_IoT {
     * TODO: get wind speed
     * @param windspeedpin describe parameter here, eg: AnalogPin.P4
     */
-    //% blockId="readwindspeed" block="read wind speed(m/s) at pin %windspeedpin"
+    //% blockId="readwindspeed" block="read wind speedpin(m/s) at pin %windspeedpin"
     export function ReadWindSpeed(windspeedpin: AnalogPin): number {
         let voltage = 0;
         let windspeed = 0;
@@ -158,13 +158,9 @@ namespace Environment_IoT {
             0,
             3100
         );
-        windspeed = voltage/40;
+        windspeed = voltage / 40;
         return windspeed;
     }
-    
-
-
-   
     
 
 
