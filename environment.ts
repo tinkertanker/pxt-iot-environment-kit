@@ -17,7 +17,7 @@ namespace Environment_IoT {
 
 
     /**
-     * TODO: describe your function here
+     * TODO: Initialize dust sensor. Set pin vLED and VO.
      * @param vLED describe parameter here, eg: DigitalPin.P10
      * @param vo describe parameter here, eg: AnalogPin.P1
 
