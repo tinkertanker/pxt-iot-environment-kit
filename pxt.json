@@ -1,7 +1,7 @@
 {
     "name": "Environment_IoT",
     "version": "1.0.0",
-    "description": "Environment IoT package by ELECFREAKS and CLASSROOM",
+    "description": "Environment IoT package by ELECFREAKS, CLASSROOM and Tinkercademy",
     "license": "MIT",
     "dependencies": {
         "core": "*",
@@ -9,8 +9,11 @@
         "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot#266dfe7ce49b47ddfb6b96ac2ccc0ee7085d0597"
     },
     "files": [
-      
         "environment.ts",
         "README.md"
     ]
+    "testFiles": [
+        "tests.ts"
+    ],
+    "public": true
 }
