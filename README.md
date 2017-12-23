@@ -1,6 +1,6 @@
 # Environment_IoT package
 
-Environment_IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [Classroom](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
+Environment_IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
 
 Environment IoT Kit can detect all kinds of environment data like temperature, humidity,wind speed, light intensity, noise, dust, PM2.5 and so on.  Besides, you can upload these environment data to thingspeak IoT server through [ESP8266 serial wifi module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html). 
 
