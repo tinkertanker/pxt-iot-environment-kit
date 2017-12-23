@@ -12,10 +12,10 @@
     "files": [
         "environment.ts",
         "README.md"
-    ]
+    ],
     
     "testFiles": [
-
+        "tests.ts"
     ],
     "public": true
 }
