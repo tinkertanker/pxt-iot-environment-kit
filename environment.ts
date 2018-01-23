@@ -1,4 +1,4 @@
-
+ 
 /**
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
@@ -10,65 +10,46 @@
  */
 //% weight=90 color=#0fbc11 icon="\uf0ee"
 namespace Environment_IoT {
-    let dustvled = DigitalPin.P10
-    let dustvo = AnalogPin.P1
-    let reference_voltage = 3300
 
-
-
-    /**
-     * TODO: Initialize dust sensor. Set pin vLED and VO.
-     * @param vLED describe parameter here, eg: DigitalPin.P10
-     * @param vo describe parameter here, eg: AnalogPin.P1
-
-*/
-    //% blockId="dust_init" block="dust sensor init at vLED %vLED| vo %vo"
-    //export function initiotkit(n: number, s: string, e: MyEnum): void {
-    export function initdust(vLED: DigitalPin, vo: AnalogPin): void {
-        dustvled = vLED
-        dustvo = vo
-        // Add code here
-    }
-    
-
+    let reference_voltage = 3100
 
     /**
      * TODO: get dust(μg/m³) 
-     * @param value describe value here, eg: 5
+     * @param vLED describe parameter here, eg: DigitalPin.P9
+     * @param vo describe parameter here, eg: AnalogPin.P10
      */
-    //% blockId="readdust" block="read dust(μg/m³)"
-    export function ReadDust(): number {
+    //% blockId="readdust" block="read dust(μg/m³) at vLED %vLED| vo %vo"
+    export function ReadDust(vLED: DigitalPin, vo: AnalogPin): number {
         let voltage = 0;
         let dust = 0;
-        pins.digitalWritePin(dustvled, 0);
-        control.waitMicros(280);
-        voltage = pins.analogReadPin(dustvo);
-        control.waitMicros(40);
-        pins.digitalWritePin(dustvled, 1);
+        pins.digitalWritePin(vLED, 0);
+        control.waitMicros(160);
+        voltage = pins.analogReadPin(vo);
+        control.waitMicros(100);
+        pins.digitalWritePin(vLED, 1);
         voltage = pins.map(
             voltage,
             0,
             1023,
             0,
-            5000
+            reference_voltage / 2 * 3
         );
         dust = (voltage - 580) * 5 / 29;
-        if (dust < 0){
-            dust = 0
-        }
-        return dust;
+        //if (dust < 0){
+        //    dust = 0
+        //}
+        return voltage;
     }
-    
-    
+
 
     /**
-     * TODO: get TMP36 Temperature(℃)
-     * @param temppin describe parameter here, eg: AnalogPin.P0
-     */
+    * TODO: get TMP36 Temperature(℃)
+    * @param temppin describe parameter here, eg: AnalogPin.P0
+    */
     //% blockId="readtemp" block="read temperature(℃) at pin %temppin"
     export function ReadTemperature(temppin: AnalogPin): number {
         let voltage = 0;
-        let Temperature = 0;    
+        let Temperature = 0;
         voltage = pins.map(
             pins.analogReadPin(temppin),
             0,
@@ -79,9 +60,10 @@ namespace Environment_IoT {
         Temperature = (voltage - 500) / 10;
         return Temperature;
     }
-    
 
-    
+
+
+
     /**
      * TODO: get pm2.5(μg/m³)
      * @param pm25pin describe parameter here, eg: DigitalPin.P11
@@ -100,9 +82,9 @@ namespace Environment_IoT {
         pm25 = pm25 / 1000 - 2
         return pm25;
     }
-    
 
-    
+
+
     /**
      * TODO: get pm10(μg/m³)
      * @param pm10pin describe parameter here, eg: DigitalPin.P12     */
@@ -120,14 +102,14 @@ namespace Environment_IoT {
         pm10 = pm10 / 1000 - 2
         return pm10;
     }
-    
-    
-    
+
+
+
     /**
     * TODO: get soil moisture(0~100)
-    * @param soilmoisturepin describe parameter here, eg: AnalogPin.P3
+    * @param soilmoisturepin describe parameter here, eg: AnalogPin.P2
     */
-    //% blockId="readsoilmoisture" block="read soil moisture at pin %soilhumiditypin"
+    //% blockId="readsoilmoisture" block="read soil moisture(0~100) at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilmoisturepin: AnalogPin): number {
         let voltage = 0;
         let soilmoisture = 0;
@@ -141,7 +123,26 @@ namespace Environment_IoT {
         soilmoisture = voltage;
         return soilmoisture;
     }
-    
+
+    /**
+    * TODO: get light intensity(0~100)
+    * @param lightintensitypin describe parameter here, eg: AnalogPin.P3
+    */
+    //% blockId="readlightintensity" block="read light intensity(0~100) at pin %lightintensitypin"
+    export function ReadLightIntensity(lightintensitypin: AnalogPin): number {
+        let voltage = 0;
+        let lightintensity = 0;
+        voltage = pins.map(
+            pins.analogReadPin(lightintensitypin),
+            0,
+            1023,
+            0,
+            100
+        );
+        lightintensity = voltage;
+        return lightintensity;
+    }
+
 
 
     /**
@@ -162,8 +163,87 @@ namespace Environment_IoT {
         windspeed = voltage / 40;
         return windspeed;
     }
-    
+
+
+
+
+    /** 
+     * TODO: get noise(dB)
+     * @param noisepin describe parameter here, eg: AnalogPin.P4
+     */
+    //% blockId="readnoise" block="read noise(dB) at pin %noisepin"
+    export function ReadNoise(noisepin: AnalogPin): number {
+        let level = 0
+        let voltage = 0
+        let noise = 0
+        let h = 0
+        let l = 0
+        let sumh = 0
+        let suml = 0
+        for (let i = 0; i < 1000; i++) {
+            level = level + pins.analogReadPin(noisepin)
+        }
+        level = level / 1000
+        for (let i = 0; i < 1000; i++) {
+            voltage = pins.analogReadPin(noisepin)
+            if (voltage >= level) {
+                h += 1
+                sumh = sumh + voltage
+            } else {
+                l += 1
+                suml = suml + voltage
+            }
+        }
+        if (h == 0) {
+            sumh = level
+        } else {
+            sumh = sumh / h
+        }
+        if (l == 0) {
+            suml = level
+        } else {
+            suml = suml / l
+        }
+        noise = sumh - suml
+        if (noise <= 28) {
+            noise = pins.map(
+                noise,
+                0,
+                28,
+                15,
+                55
+            )
+        } else if (noise <= 70) {
+            noise = pins.map(
+                noise,
+                28,
+                70,
+                55,
+                64
+            )
+        } else if (noise <= 229) {
+            noise = pins.map(
+                noise,
+                70,
+                229,
+                64,
+                76
+            )
+        } else {
+            noise = pins.map(
+                noise,
+                229,
+                1023,
+                76,
+                85
+            )
+        }
+
+        return noise;
+    }
+
 
 
 
 }
+ 
