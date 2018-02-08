@@ -35,10 +35,10 @@ namespace Environment_IoT {
             reference_voltage / 2 * 3
         );
         dust = (voltage - 580) * 5 / 29;
-        //if (dust < 0){
-        //    dust = 0
-        //}
-        return voltage;
+        if (dust < 0){
+            dust = 0
+        }
+        return dust;
     }
 
 
@@ -60,6 +60,8 @@ namespace Environment_IoT {
         Temperature = (voltage - 500) / 10;
         return Temperature;
     }
+
+
 
 
 
@@ -102,6 +104,7 @@ namespace Environment_IoT {
         pm10 = pm10 / 1000 - 2
         return pm10;
     }
+
 
 
 
@@ -235,7 +238,7 @@ namespace Environment_IoT {
                 229,
                 1023,
                 76,
-                85
+                120
             )
         }
 
