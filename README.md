@@ -13,12 +13,12 @@ Before start, you have to register an account of [thingspeak](https://thingspeak
 
 1. [ELECFREAKS Octopus:bit](http://www.elecfreaks.com/estore/elecfreaks-micro-bit-breakout-board.html).
 2. [IIC OLED display](http://www.elecfreaks.com/estore/iic-oled.html)
-3. Sound Sensor
+3. [Sound Sensor](http://www.elecfreaks.com/estore/octopus-analog-noise-sound-sensor-detection-module.html)
 4. [Octopus Temperature And Humidity Sensor](http://www.elecfreaks.com/estore/octopus-temperature-and-humidity-sensor.html)
 5. [Octopus Soil Moisture Sensor](http://www.elecfreaks.com/estore/octopus-soil-moisture-sensor-brick.html)
 6. [Octopus Analog Photocell](http://www.elecfreaks.com/estore/octopus-analog-photocell-brick-obphotocell.html)
-7. Dust Sensor
-8. PM2.5/PM10
+7. [Dust Sensor](http://www.elecfreaks.com/estore/octopus-dust-sensor-detector-module-with-sharp-gp2y1010au0f.html)
+8. [PM2.5/PM10](http://www.elecfreaks.com/estore/octopus-pm2-5-pm10-detector-sensor-module-optical-dust-sensor-air-conditioner-monitor.html)
 9. [Win Sensor](http://www.elecfreaks.com/estore/wind-speed-sensor-anemometer-three-aluminium-cups.html)
 10. [ESP8266 Serial Wifi Module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html)
 
