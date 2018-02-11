@@ -1,8 +1,19 @@
- 
+
 /**
  * Use this file to define custom functions and blocks.
  * Read more at https://makecode.microbit.org/blocks/custom
  */
+
+enum DHT11Type {
+    //% block="temperature(℃)" enumval=0
+    DHT11_temperature_C,
+
+    //% block="temperature(℉)" enumval=1
+    DHT11_temperature_F,
+
+    //% block="humidity(0~100)" enumval=2
+    DHT11_humidity,
+}
 
 
 /**
@@ -10,8 +21,8 @@
  */
 //% weight=90 color=#0fbc11 icon="\uf0ee"
 namespace Environment_IoT {
-
-    let reference_voltage = 3100
+    
+    let Reference_VOLTAGE = 3100
 
     /**
      * TODO: get dust(μg/m³) 
@@ -32,14 +43,15 @@ namespace Environment_IoT {
             0,
             1023,
             0,
-            reference_voltage / 2 * 3
+            Reference_VOLTAGE / 2 * 3
         );
         dust = (voltage - 580) * 5 / 29;
-        if (dust < 0){
+        if (dust < 0) {
             dust = 0
         }
         return dust;
     }
+
 
 
     /**
@@ -47,6 +59,8 @@ namespace Environment_IoT {
     * @param temppin describe parameter here, eg: AnalogPin.P0
     */
     //% blockId="readtemp" block="read temperature(℃) at pin %temppin"
+
+    /*
     export function ReadTemperature(temppin: AnalogPin): number {
         let voltage = 0;
         let Temperature = 0;
@@ -60,6 +74,50 @@ namespace Environment_IoT {
         Temperature = (voltage - 500) / 10;
         return Temperature;
     }
+    */
+
+    /**
+     * TODO: get DHT11
+     * @param dht11pin describe parameter here, eg: DigitalPin.P13     */
+    //% blockId="readdht11" block="read dht11 %dht11type| at pin %dht11pin"
+    export function temperature(dht11type: DHT11Type, dht11pin: DigitalPin): number {
+        pins.digitalWritePin(dht11pin, 0)
+        basic.pause(18)
+        let i = pins.digitalReadPin(dht11pin)
+        pins.setPull(dht11pin, PinPullMode.PullUp);
+
+        while (pins.digitalReadPin(dht11pin) == 1);
+        while (pins.digitalReadPin(dht11pin) == 0);
+        while (pins.digitalReadPin(dht11pin) == 1);
+
+        let value = 0;
+        let counter = 0;
+
+        for (let i = 0; i <= 32 - 1; i++) {
+            while (pins.digitalReadPin(dht11pin) == 0);
+            counter = 0
+            while (pins.digitalReadPin(dht11pin) == 1) {
+                counter += 1;
+            }
+            if (counter > 4) {
+                value = value + (1 << (31 - i));
+            }
+        }
+
+        switch (dht11type) {
+            case 0:
+                return (value & 0x0000ff00) >> 8
+                break;
+            case 1:
+                return ((value & 0x0000ff00) >> 8) * 9 / 5 + 32
+                break;
+            case 2:
+                return value >> 24
+                break;
+            default:
+                return 0
+        }
+    }
 
 
 
@@ -67,9 +125,9 @@ namespace Environment_IoT {
 
 
     /**
-     * TODO: get pm2.5(μg/m³)
-     * @param pm25pin describe parameter here, eg: DigitalPin.P11
-     */
+    * TODO: get pm2.5(μg/m³)
+    * @param pm25pin describe parameter here, eg: DigitalPin.P11
+    */
     //% blockId="readpm25" block="read pm2.5(μg/m³) at pin %pm25pin"
     export function ReadPM25(pm25pin: DigitalPin): number {
         let pm25 = 0
@@ -88,8 +146,8 @@ namespace Environment_IoT {
 
 
     /**
-     * TODO: get pm10(μg/m³)
-     * @param pm10pin describe parameter here, eg: DigitalPin.P12     */
+    * TODO: get pm10(μg/m³)
+    * @param pm10pin describe parameter here, eg: DigitalPin.P12     */
     //% blockId="readpm10" block="read pm10(μg/m³) at pin %pm10pin"
     export function ReadPM10(pm10pin: DigitalPin): number {
         let pm10 = 0
@@ -125,8 +183,9 @@ namespace Environment_IoT {
         );
         soilmoisture = voltage;
         return soilmoisture;
-    }
+    }    
 
+    
     /**
     * TODO: get light intensity(0~100)
     * @param lightintensitypin describe parameter here, eg: AnalogPin.P3
@@ -161,19 +220,18 @@ namespace Environment_IoT {
             0,
             1023,
             0,
-            reference_voltage
+            Reference_VOLTAGE
         );
         windspeed = voltage / 40;
         return windspeed;
-    }
-
+    }   
 
 
 
     /** 
-     * TODO: get noise(dB)
-     * @param noisepin describe parameter here, eg: AnalogPin.P4
-     */
+    * TODO: get noise(dB)
+    * @param noisepin describe parameter here, eg: AnalogPin.P4
+    */
     //% blockId="readnoise" block="read noise(dB) at pin %noisepin"
     export function ReadNoise(noisepin: AnalogPin): number {
         let level = 0
@@ -241,12 +299,9 @@ namespace Environment_IoT {
                 120
             )
         }
-
         return noise;
-    }
-
-
+    } 
 
 
 }
- 
+
