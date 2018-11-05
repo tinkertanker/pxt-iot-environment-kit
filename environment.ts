@@ -19,7 +19,7 @@ enum DHT11Type {
 /**
  * Custom blocks
  */
-//% weight=90 color=#0fbc11 icon="\uuf0ee"
+//% weight=90 color=#0fbc11 icon="\uf0ee"
 namespace Environment {
     
     let Reference_VOLTAGE = 3100
