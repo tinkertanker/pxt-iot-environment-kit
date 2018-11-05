@@ -29,7 +29,7 @@ namespace Environment_IoT {
      * @param vLED describe parameter here, eg: DigitalPin.P9
      * @param vo describe parameter here, eg: AnalogPin.P10
      */
-    //% blockId="readdust" block="read dust(μg/m³) at vLED %vLED| vo %vo"
+    //% blockId="readdust" block="value of dust(μg/m³) at vLED %vLED| vo %vo"
     export function ReadDust(vLED: DigitalPin, vo: AnalogPin): number {
         let voltage = 0;
         let dust = 0;
@@ -79,7 +79,7 @@ namespace Environment_IoT {
     /**
      * TODO: get DHT11
      * @param dht11pin describe parameter here, eg: DigitalPin.P13     */
-    //% blockId="readdht11" block="read dht11 %dht11type| at pin %dht11pin"
+    //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
     export function temperature(dht11type: DHT11Type, dht11pin: DigitalPin): number {
         pins.digitalWritePin(dht11pin, 0)
         basic.pause(18)
@@ -128,7 +128,7 @@ namespace Environment_IoT {
     * TODO: get pm2.5(μg/m³)
     * @param pm25pin describe parameter here, eg: DigitalPin.P11
     */
-    //% blockId="readpm25" block="read pm2.5(μg/m³) at pin %pm25pin"
+    //% blockId="readpm25" block="value of pm2.5(μg/m³) at pin %pm25pin"
     export function ReadPM25(pm25pin: DigitalPin): number {
         let pm25 = 0
         while (pins.digitalReadPin(pm25pin) != 0) {
@@ -148,7 +148,7 @@ namespace Environment_IoT {
     /**
     * TODO: get pm10(μg/m³)
     * @param pm10pin describe parameter here, eg: DigitalPin.P12     */
-    //% blockId="readpm10" block="read pm10(μg/m³) at pin %pm10pin"
+    //% blockId="readpm10" block="value of pm10(μg/m³) at pin %pm10pin"
     export function ReadPM10(pm10pin: DigitalPin): number {
         let pm10 = 0
         while (pins.digitalReadPin(pm10pin) != 0) {
@@ -170,7 +170,7 @@ namespace Environment_IoT {
     * TODO: get soil moisture(0~100)
     * @param soilmoisturepin describe parameter here, eg: AnalogPin.P2
     */
-    //% blockId="readsoilmoisture" block="read soil moisture(0~100) at pin %soilhumiditypin"
+    //% blockId="readsoilmoisture" block="value of soil moisture(0~100) at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilmoisturepin: AnalogPin): number {
         let voltage = 0;
         let soilmoisture = 0;
@@ -190,7 +190,7 @@ namespace Environment_IoT {
     * TODO: get light intensity(0~100)
     * @param lightintensitypin describe parameter here, eg: AnalogPin.P3
     */
-    //% blockId="readlightintensity" block="read light intensity(0~100) at pin %lightintensitypin"
+    //% blockId="readlightintensity" block="value of light intensity(0~100) at pin %lightintensitypin"
     export function ReadLightIntensity(lightintensitypin: AnalogPin): number {
         let voltage = 0;
         let lightintensity = 0;
@@ -211,7 +211,7 @@ namespace Environment_IoT {
     * TODO: get wind speed(m/s)
     * @param windspeedpin describe parameter here, eg: AnalogPin.P4
     */
-    //% blockId="readwindspeed" block="read wind speed(m/s) at pin %windspeedpin"
+    //% blockId="readwindspeed" block="value of wind speed(m/s) at pin %windspeedpin"
     export function ReadWindSpeed(windspeedpin: AnalogPin): number {
         let voltage = 0;
         let windspeed = 0;
