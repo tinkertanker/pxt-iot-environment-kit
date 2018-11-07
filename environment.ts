@@ -19,7 +19,7 @@ enum DHT11Type {
  * Custom blocks
  */
 //% weight=90 color=#0fbc11 icon="\uf0ee"
-namespace Environment_IoT {
+namespace Environment {
     
     let Reference_VOLTAGE = 3100
 
@@ -28,7 +28,7 @@ namespace Environment_IoT {
      * @param vLED describe parameter here, eg: DigitalPin.P9
      * @param vo describe parameter here, eg: AnalogPin.P10
      */
-    //% blockId="readdust" block="read dust(μg/m³) at vLED %vLED| vo %vo"
+    //% blockId="readdust" block="value of dust(μg/m³) at vLED %vLED| vo %vo"
     export function ReadDust(vLED: DigitalPin, vo: AnalogPin): number {
         let voltage = 0;
         let dust = 0;
@@ -78,7 +78,7 @@ namespace Environment_IoT {
     /**
      * TODO: get DHT11
      * @param dht11pin describe parameter here, eg: DigitalPin.P13     */
-    //% blockId="readdht11" block="read dht11 %dht11type| at pin %dht11pin"
+    //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
     export function temperature(dht11type: DHT11Type, dht11pin: DigitalPin): number {
         pins.digitalWritePin(dht11pin, 0)
         basic.pause(18)
@@ -127,7 +127,7 @@ namespace Environment_IoT {
     * TODO: get pm2.5(μg/m³)
     * @param pm25pin describe parameter here, eg: DigitalPin.P11
     */
-    //% blockId="readpm25" block="read pm2.5(μg/m³) at pin %pm25pin"
+    //% blockId="readpm25" block="value of pm2.5(μg/m³) at pin %pm25pin"
     export function ReadPM25(pm25pin: DigitalPin): number {
         let pm25 = 0
         while (pins.digitalReadPin(pm25pin) != 0) {
@@ -147,7 +147,7 @@ namespace Environment_IoT {
     /**
     * TODO: get pm10(μg/m³)
     * @param pm10pin describe parameter here, eg: DigitalPin.P12     */
-    //% blockId="readpm10" block="read pm10(μg/m³) at pin %pm10pin"
+    //% blockId="readpm10" block="value of pm10(μg/m³) at pin %pm10pin"
     export function ReadPM10(pm10pin: DigitalPin): number {
         let pm10 = 0
         while (pins.digitalReadPin(pm10pin) != 0) {
@@ -169,7 +169,7 @@ namespace Environment_IoT {
     * TODO: get soil moisture(0~100)
     * @param soilmoisturepin describe parameter here, eg: AnalogPin.P2
     */
-    //% blockId="readsoilmoisture" block="read soil moisture(0~100) at pin %soilhumiditypin"
+    //% blockId="readsoilmoisture" block="value of soil moisture(0~100) at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilmoisturepin: AnalogPin): number {
         let voltage = 0;
         let soilmoisture = 0;
@@ -189,7 +189,7 @@ namespace Environment_IoT {
     * TODO: get light intensity(0~100)
     * @param lightintensitypin describe parameter here, eg: AnalogPin.P3
     */
-    //% blockId="readlightintensity" block="read light intensity(0~100) at pin %lightintensitypin"
+    //% blockId="readlightintensity" block="value of light intensity(0~100) at pin %lightintensitypin"
     export function ReadLightIntensity(lightintensitypin: AnalogPin): number {
         let voltage = 0;
         let lightintensity = 0;
@@ -210,7 +210,7 @@ namespace Environment_IoT {
     * TODO: get wind speed(m/s)
     * @param windspeedpin describe parameter here, eg: AnalogPin.P4
     */
-    //% blockId="readwindspeed" block="read wind speed(m/s) at pin %windspeedpin"
+    //% blockId="readwindspeed" block="value of wind speed(m/s) at pin %windspeedpin"
     export function ReadWindSpeed(windspeedpin: AnalogPin): number {
         let voltage = 0;
         let windspeed = 0;
@@ -229,9 +229,9 @@ namespace Environment_IoT {
 
     /** 
     * TODO: get noise(dB)
-    * @param noisepin describe parameter here, eg: AnalogPin.P4
+    * @param noisepin describe parameter here, eg: AnalogPin.P1
     */
-    //% blockId="readnoise" block="read noise(dB) at pin %noisepin"
+    //% blockId="readnoise" block="value of noise(dB) at pin %noisepin"
     export function ReadNoise(noisepin: AnalogPin): number {
         let level = 0
         let voltage = 0
@@ -265,41 +265,82 @@ namespace Environment_IoT {
             suml = suml / l
         }
         noise = sumh - suml
-        if (noise <= 28) {
+        if (noise <= 4) {
             noise = pins.map(
                 noise,
                 0,
-                28,
-                15,
+                4,
+                30,
+                50
+            )
+        } else if (noise <= 8) {
+            noise = pins.map(
+                noise,
+                4,
+                8,
+                50,
                 55
             )
-        } else if (noise <= 70) {
+        } else if (noise <= 14) {
             noise = pins.map(
                 noise,
-                28,
-                70,
+                9,
+                14,
                 55,
-                64
+                60
             )
-        } else if (noise <= 229) {
+        } else if (noise <= 32) {
             noise = pins.map(
                 noise,
+                15,
+                32,
+                60,
+                70
+            )
+        } else if (noise <= 60) {
+            noise = pins.map(
+                noise,
+                33,
+                60,
                 70,
-                229,
-                64,
-                76
+                75
+            )
+        } else if (noise <= 100) {
+            noise = pins.map(
+                noise,
+                61,
+                100,
+                75,
+                80
+            )
+        } else if (noise <= 150) {
+            noise = pins.map(
+                noise,
+                101,
+                150,
+                80,
+                85
+            )
+        } else if (noise <= 231) {
+            noise = pins.map(
+                noise,
+                151,
+                231,
+                85,
+                90
             )
         } else {
             noise = pins.map(
                 noise,
-                229,
+                231,
                 1023,
-                76,
+                90,
                 120
             )
         }
-        return noise;
-    } 
+        noise = Math.round(noise)
+        return noise
+    }
 
 
 }
