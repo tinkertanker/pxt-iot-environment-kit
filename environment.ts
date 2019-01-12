@@ -91,31 +91,50 @@ namespace Environment {
 
         let value = 0;
         let counter = 0;
+        let error = 0;
 
         for (let i = 0; i <= 32 - 1; i++) {
-            while (pins.digitalReadPin(dht11pin) == 0);
+            while (pins.digitalReadPin(dht11pin) == 0) {
+                //check if the wait is too long, 1000 is arbituary
+                counter++;
+                if (counter == 1000) {
+                    error = 1;
+                }
+            }
             counter = 0
             while (pins.digitalReadPin(dht11pin) == 1) {
                 counter += 1;
             }
-            if (counter > 4) {
+            if (counter > 3) {
                 value = value + (1 << (31 - i));
+                //check if the wait is too long, 1000 is arbituary
+                if (counter >= 1000) {
+                    error = 2;
+                }
+            }
+        }
+        if (error == 1) {
+            return 1001;
+        }
+        else if (error == 2) {
+            return 1002;
+        }
+        else {
+            switch (dht11type) {
+                case 0:
+                    return (value & 0x0000ff00) >> 8
+                    break;
+                case 1:
+                    return ((value & 0x0000ff00) >> 8) * 9 / 5 + 32
+                    break;
+                case 2:
+                    return value >> 24
+                    break;
+                default:
+                    return 0;
             }
         }
 
-        switch (dht11type) {
-            case 0:
-                return (value & 0x0000ff00) >> 8
-                break;
-            case 1:
-                return ((value & 0x0000ff00) >> 8) * 9 / 5 + 32
-                break;
-            case 2:
-                return value >> 24
-                break;
-            default:
-                return 0
-        }
     }
 
 
