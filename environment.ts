@@ -1,6 +1,6 @@
 /**
  * Use this file to define custom functions and blocks.
- * Read more at https://makecode.microbit.org/blocks/custom
+ * Read more at https://www.elecfreaks.com
  */
 
 enum DHT11Type {
@@ -18,7 +18,7 @@ enum DHT11Type {
 /**
  * Custom blocks
  */
-//% weight=90 color=#0fbc11 icon="\uf0ee"
+//% weight=90 color=#007a4b icon="\uf0ee"
 namespace Environment {
     
     let Reference_VOLTAGE = 3100
@@ -44,11 +44,12 @@ namespace Environment {
             0,
             Reference_VOLTAGE / 2 * 3
         );
-        dust = (voltage - 580) * 5 / 29;
+        dust = (voltage - 380) * 5 / 29;
         if (dust < 0) {
             dust = 0
         }
-        return dust;
+        return Math.round(dust)
+
     }
 
 
@@ -200,7 +201,7 @@ namespace Environment {
             100
         );
         soilmoisture = voltage;
-        return soilmoisture;
+        return Math.round(soilmoisture)
     }    
 
     
@@ -220,7 +221,7 @@ namespace Environment {
             100
         );
         lightintensity = voltage;
-        return lightintensity;
+        return Math.round(lightintensity)
     }
 
 
@@ -241,7 +242,7 @@ namespace Environment {
             Reference_VOLTAGE
         );
         windspeed = voltage / 40;
-        return windspeed;
+        return Math.round(windspeed)
     }   
 
 
@@ -358,7 +359,7 @@ namespace Environment {
             )
         }
         noise = Math.round(noise)
-        return noise
+        return Math.round(noise)
     }
 
 
