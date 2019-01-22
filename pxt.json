@@ -6,8 +6,8 @@
     "dependencies": {
         "core": "*",
         "OLED": "github:Tinkertanker/pxt-oled-ssd1306",
-        "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot",
-        "OLED": "github:Tinkertanker/pxt-realtimeclock-ds1307"
+        "RTC1307": "github:Tinkertanker/pxt-realtimeclock-ds1307",
+        "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot"
     },
 
     "files": [
