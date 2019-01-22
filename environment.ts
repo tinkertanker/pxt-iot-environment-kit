@@ -1,6 +1,6 @@
 /**
  * Use this file to define custom functions and blocks.
- * Read more at https://makecode.microbit.org/blocks/custom
+ * Read more at https://www.elecfreaks.com
  */
 
 enum DHT11Type {
