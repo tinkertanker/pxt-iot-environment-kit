@@ -2,12 +2,9 @@
 
 Environment_IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
 
-Environment IoT Kit can detect all kinds of environment data like temperature, humidity,wind speed, light intensity, noise, dust, PM2.5 and so on.  Besides, you can upload these environment data to thingspeak IoT server through [ESP8266 serial wifi module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html). 
-
-Before start, you have to register an account of [thingspeak](https://thingspeak.com/).
+The ELECFREAKS Environment IoT Kit can detect all kinds of environment data like temperature, humidity, wind speed, light intensity, noise, dust, and PM2.5 level. In addition, you can upload these environment data to the [Thingspeak](https://thingspeak.com) IoT server (free registration required), using the [ESP8266 serial wifi module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html). 
 
 ![](https://github.com/elecfreaks/pxt-environment/blob/master/microbit_CEO_and_Environment_Kit.jpg)
-
 
 ## Hardware list 
 
@@ -22,14 +19,12 @@ Before start, you have to register an account of [thingspeak](https://thingspeak
 9. [Win Sensor](http://www.elecfreaks.com/estore/wind-speed-sensor-anemometer-three-aluminium-cups.html)
 10. [ESP8266 Serial Wifi Module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html)
 
-
 ## Basic usage
 
 1. Open [Microsoft Makecode/microbit](https://pxt.microbit.org) and create a new project 
 2. Search and add the `environment` package
 3. Use the `Environment_IoT` drawer in the editor to drag out and arrange the blocks
 4. Click `Download` to move your program to the micro:bit
-
 
 ## Example
 
