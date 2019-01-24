@@ -12,6 +12,7 @@
 
     "files": [
         "environment.ts",
+        "bme280.cpp",
         "README.md"
     ],
     
