@@ -3,28 +3,8 @@
  * Read more at https://www.elecfreaks.com
  */
 
-enum DHT11Type {
-    //% block="temperature(℃)" enumval=0
-    DHT11_temperature_C,
-
-    //% block="temperature(℉)" enumval=1
-    DHT11_temperature_F,
-
-    //% block="humidity(0~100)" enumval=2
-    DHT11_humidity,
-}
 
 
-enum Distance_Unit {
-    //% block="mm" enumval=0
-    Distance_Unit_mm,
-
-    //% block="cm" enumval=1
-    Distance_Unit_cm,
-
-    //% block="inch" enumval=2
-    Distance_Unit_inch,
-}
 
 
 /**
@@ -33,14 +13,56 @@ enum Distance_Unit {
 //% weight=90 color=#007a4b icon="\uf0ee"
 namespace Environment {
 
+
+    export enum DHT11Type {
+        //% block="temperature(℃)" enumval=0
+        DHT11_temperature_C,
+
+        //% block="temperature(℉)" enumval=1
+        DHT11_temperature_F,
+
+        //% block="humidity(0~100)" enumval=2
+        DHT11_humidity,
+    }
+
+
+    export enum Distance_Unit {
+        //% block="mm" enumval=0
+        Distance_Unit_mm,
+
+        //% block="cm" enumval=1
+        Distance_Unit_cm,
+
+        //% block="inch" enumval=2
+        Distance_Unit_inch,
+    }
+
+
+    export enum BME280Type {
+        //% block="temperature(℃)" enumval=0
+        BME280_temperature_C,
+
+        //% block="humidity(0~100)" enumval=1
+        BME280_humidity,
+
+        //% block="pressure(hPa)" enumval=2
+        BME280_pressure,
+
+        //% block="altitude(M)" enumval=3
+        BME280_altitude,
+    }
+
+
+
+
     // keep track of services
-    let rainMonitorStarted = false;
-    let windMonitorStarted = false;
+    //let rainMonitorStarted = false;
+    //let windMonitorStarted = false;
     let weatherMonitorStarted = false;
     // Keep Track of weather monitoring variables
-    let numRainDumps = 0
-    let numWindTurns = 0
-    let windMPH = 0
+    //let numRainDumps = 0
+    //let numWindTurns = 0
+    //let windMPH = 0
 
     // BME280 Addresses
     const bmeAddr = 0x76
@@ -339,6 +361,26 @@ namespace Environment {
     }
 
 
+    /**
+    * TODO: get water level(0~100)
+    * @param waterlevelpin describe parameter here, eg: AnalogPin.P3
+    */
+    //% blockId="readWaterLevel" block="value of water level(0~100) at pin %waterlevelpin"
+    export function ReadWaterLevel(waterlevelpin: AnalogPin): number {
+        let voltage = 0;
+        let waterlevel = 0;
+        voltage = pins.map(
+            pins.analogReadPin(waterlevelpin),
+            0,
+            700,
+            0,
+            100
+        );
+        waterlevel = voltage;
+        return Math.round(waterlevel)
+    }
+
+
 
     /**
     * TODO: get wind speed(m/s)
@@ -481,6 +523,8 @@ namespace Environment {
      * Functions for interfacing with the BME280
      ***************************************************************************************/
 
+
+
     /**
      * Writes a value to a register on the BME280
      */
@@ -498,51 +542,86 @@ namespace Environment {
     }
 
     /**
+     * TODO: get BME280
+     */
+    //% blockId="readbme280" block="value of BME280 %bme280type"
+    export function getbme280(bme280type: BME280Type): number {
+        switch (bme280type) {
+            case 0:
+                return BME280_temperature()
+                break;
+            case 1:
+                return BME280_humidity()
+                break;
+            case 2:
+                return BME280_pressure()
+                break;
+            case 3:
+                return BME280_altitude()
+                break;
+            default:
+                return 0;
+        }
+
+    }
+
+    /**
      * Reads the temp from the BME sensor and uses compensation for calculator temperature.
      * Returns 4 digit number. Value should be devided by 100 to get DegC
      */
-    //% weight=43 blockGap=8 blockId="weatherbit_temperature" block="temperature(C)"
-    export function BME280_temperature(): number {
+    //% weight=43 blockGap=8 blockId="bme280_temperature" block="temperature(C)"
+    function BME280_temperature(): number {
+        startWeatherMonitoring()
+
         // Read the temperature registers
         let tempRegM = readBMEReg(tempMSB, NumberFormat.UInt16BE)
         let tempRegL = readBMEReg(tempXlsb, NumberFormat.UInt8LE)
 
         // Use compensation formula and return result
-        return compensateTemp((tempRegM << 4) | (tempRegL >> 4))
+        //return compensateTemp((tempRegM << 4) | (tempRegL >> 4))
+        let bme280_temperature = compensateTemp((tempRegM << 4) | (tempRegL >> 4))
+        bme280_temperature = Math.idiv(bme280_temperature, 100)
+        return bme280_temperature
+
     }
 
     /**
      * Reads the humidity from the BME sensor and uses compensation for calculating humidity.
      * returns a 5 digit number. Value should be divided by 1024 to get % relative humidity. 
      */
-    //% weight=41 blockGap=8 blockId="weatherbit_humidity" block="humidity"
-    export function BME280_humidity(): number {
+    //% weight=41 blockGap=8 blockId="bme280_humidity" block="humidity"
+    function BME280_humidity(): number {
+        startWeatherMonitoring()
+
         // Read the pressure registers
         let humReg = readBMEReg(humMSB, NumberFormat.UInt16BE)
 
         // Compensate and return humidity
-        return compensateHumidity(humReg)
+        return compensateHumidity(humReg) >> 10
     }
 
     /**
      * Reads the pressure from the BME sensor and uses compensation for calculating pressure.
      * Returns an 8 digit number. Value should be divided by 25600 to get hPa. 
      */
-    //% weight=42 blockGap=8 blockId="pressure" block="pressure"
-    export function BME280_pressure(): number {
+    //% weight=42 blockGap=8 blockId="bme280_pressure" block="pressure"
+    function BME280_pressure(): number {
+        startWeatherMonitoring()
+
         // Read the temperature registers
         let pressRegM = readBMEReg(pressMSB, NumberFormat.UInt16BE)
         let pressRegL = readBMEReg(pressXlsb, NumberFormat.UInt8LE)
 
         // Compensate and return pressure
-        return compensatePressure((pressRegM << 4) | (pressRegL >> 4), tFine, digPBuf)
+        let bme280_pressure = compensatePressure((pressRegM << 4) | (pressRegL >> 4), tFine, digPBuf)
+        return Math.idiv(bme280_pressure, 25600)
     }
 
     /**
      * Sets up BME for in Weather Monitoring Mode.
      */
-    //% weight=44 blockGap=8 blockId="weatherbit_setupBME280" block="start weather monitoring"
-    export function startWeatherMonitoring(): void {
+    //% weight=44 blockGap=8 blockId="bme280_setupBME280" block="start weather monitoring"
+    function startWeatherMonitoring(): void {
         if (weatherMonitorStarted) return;
 
         // The 0xE5 register is 8 bits where 4 bits go to one value and 4 bits go to another
@@ -621,9 +700,9 @@ namespace Environment {
     }
 
     /**
-     * Function used for simulator, actual implementation is in weatherbit.cpp
+     * Function used for simulator, actual implementation is in bme280.cpp
      */
-    //% shim=weatherbit::compensatePressure
+    //% shim=Environment::compensatePressure
     function compensatePressure(pressRegVal: number, tFine: number, compensation: Buffer) {
         // Fake function for simulator
         return 0
@@ -633,8 +712,8 @@ namespace Environment {
    * Reads the pressure from the BME sensor and uses compensation for calculating pressure.
    * Returns altitude in meters based on pressure at sea level. (absolute altitude)
    */
-    //% weight=40 blockGap=28 blockId="weatherbit_altitude" block="altitude(M)"
-    export function altitude(): number {
+    //% weight=40 blockGap=28 blockId="bme280_altitude" block="altitude(M)"
+    function BME280_altitude(): number {
         startWeatherMonitoring();
 
         let pressRegM = readBMEReg(pressMSB, NumberFormat.UInt16BE)
@@ -643,9 +722,9 @@ namespace Environment {
     }
 
     /**
-     * Function used for simulator, actual implementation is in weatherbit.cpp
+     * Function used for simulator, actual implementation is in bme280.cpp
      */
-    //% shim=weatherbit::calcAltitude
+    //% shim=Environment::calcAltitude
     function calcAltitude(pressRegVal: number, tFine: number, compensation: Buffer) {
         // Fake function for simulator
         return 0
