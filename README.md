@@ -1,4 +1,4 @@
-# Environment_IoT package
+# Environment_and_Science_IoT package
 
 Environment_IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
 
