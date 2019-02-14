@@ -1,8 +1,8 @@
-# Environment_IoT package
+# Environment and Science IoT package
 
-Environment_IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
+Environment and Science IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
 
-The ELECFREAKS Environment IoT Kit can detect all kinds of environment data like temperature, humidity, wind speed, light intensity, noise, dust, and PM2.5 level. In addition, you can upload these environment data to the [Thingspeak](https://thingspeak.com) IoT server (free registration required), using the [ESP8266 serial wifi module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html). 
+The ELECFREAKS Environment and Science IoT Kit can detect all kinds of environment data like temperature, humidity, wind speed, light intensity, noise, dust, and PM2.5 level. In addition, you can upload these environment data to the [Thingspeak](https://thingspeak.com) IoT server (free registration required), using the [ESP8266 serial wifi module](http://www.elecfreaks.com/estore/esp8266-serial-wifi-module.html). 
 
 ![](https://github.com/elecfreaks/pxt-environment/blob/master/microbit_CEO_and_Environment_Kit.jpg)
 
