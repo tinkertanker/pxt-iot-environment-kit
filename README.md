@@ -1,4 +1,4 @@
-# Environment and Science IoT package
+# environment
 
 Environment and Science IoT package is developed under the cooperation of [ELECFREAKS](https://www.elecfreaks.com/), [CLASSROOM](http://www.classroom.com.hk/) and [TINKERCADEMY](https://tinkercademy.com/).
 
@@ -95,8 +95,8 @@ MIT
 (The metadata above is needed for package search.)
 
 ```package
-environment=github:elecfreaks/pxt-environment
-iot=github:elecfreaks/pxt-environment
+environment=github:sunnyrainwss/pxt-iot-environment-kit
+iot=github:sunnyrainwss/pxt-iot-environment-kit
 ```
 
 
