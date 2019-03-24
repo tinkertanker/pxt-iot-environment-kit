@@ -12,7 +12,8 @@
     "files": [
         "environment.ts",
         "bme280.cpp",
-        "README.md"
+        "README.md",
+        "_locales/zh-tw/Environment-and-Science-IoT-strings.json"
     ],
     "testFiles": [
         "tests.ts"
