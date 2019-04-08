@@ -1,7 +1,7 @@
 {
     "name": "Environment-and-Science-IoT",
     "version": "2.0.0",
-    "description": "環境與科學物聯網工具組",
+    "description": "Environment and Science IoT Kit for micro:bit",
     "license": "MIT",
     "dependencies": {
         "core": "*",
