@@ -9,13 +9,12 @@
         "RTC1307": "github:Tinkertanker/pxt-realtimeclock-ds1307",
         "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot"
     },
-
     "files": [
         "environment.ts",
         "bme280.cpp",
-        "README.md"
+        "README.md",
+        "_locales/zh/Environment-and-Science-IoT-strings.json"
     ],
-    
     "testFiles": [
         "tests.ts"
     ],
