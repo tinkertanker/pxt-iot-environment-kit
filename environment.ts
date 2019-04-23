@@ -6,48 +6,6 @@
 //% weight=90 color=#ff7a4b icon="\uf0ee" block="Octopus"
 namespace Environment {
 
-
-    export enum DHT11Type {
-        //% block="temperature(℃)" enumval=0
-        DHT11_temperature_C,
-
-        //% block="temperature(℉)" enumval=1
-        DHT11_temperature_F,
-
-        //% block="humidity(0~100)" enumval=2
-        DHT11_humidity,
-    }
-
-
-    export enum Distance_Unit {
-        //% block="mm" enumval=0
-        Distance_Unit_mm,
-
-        //% block="cm" enumval=1
-        Distance_Unit_cm,
-
-        //% block="inch" enumval=2
-        Distance_Unit_inch,
-    }
-
-
-    export enum BME280Type {
-        //% block="temperature(℃)" enumval=0
-        BME280_temperature_C,
-
-        //% block="humidity(0~100)" enumval=1
-        BME280_humidity,
-
-        //% block="pressure(hPa)" enumval=2
-        BME280_pressure,
-
-        //% block="altitude(M)" enumval=3
-        BME280_altitude,
-    }
-
-
-
-
     // keep track of services
     //let rainMonitorStarted = false;
     //let windMonitorStarted = false;
@@ -58,18 +16,33 @@ namespace Environment {
     //let windMPH = 0
 
     // BME280 Addresses
-    const bmeAddr = 0x76
-    const ctrlHum = 0xF2
-    const ctrlMeas = 0xF4
-    const config = 0xF5
-    const pressMSB = 0xF7
-    const pressLSB = 0xF8
-    const pressXlsb = 0xF9
-    const tempMSB = 0xFA
-    const tempLSB = 0xFB
-    const tempXlsb = 0xFC
-    const humMSB = 0xFD
-    const humLSB = 0xFE
+    let BME280_I2C_ADDR = 0x76
+    let dig_T1 = getUInt16LE(0x88)
+    let dig_T2 = getInt16LE(0x8A)
+    let dig_T3 = getInt16LE(0x8C)
+    let dig_P1 = getUInt16LE(0x8E)
+    let dig_P2 = getInt16LE(0x90)
+    let dig_P3 = getInt16LE(0x92)
+    let dig_P4 = getInt16LE(0x94)
+    let dig_P5 = getInt16LE(0x96)
+    let dig_P6 = getInt16LE(0x98)
+    let dig_P7 = getInt16LE(0x9A)
+    let dig_P8 = getInt16LE(0x9C)
+    let dig_P9 = getInt16LE(0x9E)
+    let dig_H1 = getreg(0xA1)
+    let dig_H2 = getInt16LE(0xE1)
+    let dig_H3 = getreg(0xE3)
+    let a = getreg(0xE5)
+    let dig_H4 = (getreg(0xE4) << 4) + (a % 16)
+    let dig_H5 = (getreg(0xE6) << 4) + (a >> 4)
+    let dig_H6 = getInt8LE(0xE7)
+    let T = 0
+    let P = 0
+    let H = 0
+    setreg(0xF2, 0x04)
+    setreg(0xF4, 0x2F)
+    setreg(0xF5, 0x0C)
+    setreg(0xF4, 0x2F)
 
     // Stores compensation values for Temperature (must be read from BME280 NVM)
     let digT1Val = 0
@@ -113,6 +86,107 @@ namespace Environment {
     const digH6 = 0xE7
 
     let Reference_VOLTAGE = 3100
+
+
+
+    export enum DHT11Type {
+        //% block="temperature(℃)" enumval=0
+        DHT11_temperature_C,
+
+        //% block="temperature(℉)" enumval=1
+        DHT11_temperature_F,
+
+        //% block="humidity(0~100)" enumval=2
+        DHT11_humidity,
+    }
+
+
+    export enum Distance_Unit {
+        //% block="mm" enumval=0
+        Distance_Unit_mm,
+
+        //% block="cm" enumval=1
+        Distance_Unit_cm,
+
+        //% block="inch" enumval=2
+        Distance_Unit_inch,
+    }
+
+
+    export enum BME280_state {
+        //% block="temperature(℃)" enumval=0
+        BME280_temperature_C,
+
+        //% block="humidity(0~100)" enumval=1
+        BME280_humidity,
+
+        //% block="pressure(hPa)" enumval=2
+        BME280_pressure,
+
+        //% block="altitude(M)" enumval=3
+        BME280_altitude,
+    }
+
+
+
+
+
+
+ function setreg(reg: number, dat: number): void {
+        let buf = pins.createBuffer(2);
+        buf[0] = reg;
+        buf[1] = dat;
+        pins.i2cWriteBuffer(BME280_I2C_ADDR, buf);
+    }
+
+    function getreg(reg: number): number {
+        pins.i2cWriteNumber(BME280_I2C_ADDR, reg, NumberFormat.UInt8BE);
+        return pins.i2cReadNumber(BME280_I2C_ADDR, NumberFormat.UInt8BE);
+    }
+
+    function getInt8LE(reg: number): number {
+        pins.i2cWriteNumber(BME280_I2C_ADDR, reg, NumberFormat.UInt8BE);
+        return pins.i2cReadNumber(BME280_I2C_ADDR, NumberFormat.Int8LE);
+    }
+
+    function getUInt16LE(reg: number): number {
+        pins.i2cWriteNumber(BME280_I2C_ADDR, reg, NumberFormat.UInt8BE);
+        return pins.i2cReadNumber(BME280_I2C_ADDR, NumberFormat.UInt16LE);
+    }
+
+    function getInt16LE(reg: number): number {
+        pins.i2cWriteNumber(BME280_I2C_ADDR, reg, NumberFormat.UInt8BE);
+        return pins.i2cReadNumber(BME280_I2C_ADDR, NumberFormat.Int16LE);
+    }
+    function get(): void {
+        let adc_T = (getreg(0xFA) << 12) + (getreg(0xFB) << 4) + (getreg(0xFC) >> 4)
+        let var1 = (((adc_T >> 3) - (dig_T1 << 1)) * dig_T2) >> 11
+        let var2 = (((((adc_T >> 4) - dig_T1) * ((adc_T >> 4) - dig_T1)) >> 12) * dig_T3) >> 14
+        let t = var1 + var2
+        T = ((t * 5 + 128) >> 8) / 100
+        var1 = (t >> 1) - 64000
+        var2 = (((var1 >> 2) * (var1 >> 2)) >> 11) * dig_P6
+        var2 = var2 + ((var1 * dig_P5) << 1)
+        var2 = (var2 >> 2) + (dig_P4 << 16)
+        var1 = (((dig_P3 * ((var1 >> 2) * (var1 >> 2)) >> 13) >> 3) + (((dig_P2) * var1) >> 1)) >> 18
+        var1 = ((32768 + var1) * dig_P1) >> 15
+        if (var1 == 0)
+            return; // avoid exception caused by division by zero
+        let adc_P = (getreg(0xF7) << 12) + (getreg(0xF8) << 4) + (getreg(0xF9) >> 4)
+        let _p = ((1048576 - adc_P) - (var2 >> 12)) * 3125
+        _p = (_p / var1) * 2;
+        var1 = (dig_P9 * (((_p >> 3) * (_p >> 3)) >> 13)) >> 12
+        var2 = (((_p >> 2)) * dig_P8) >> 13
+        P = _p + ((var1 + var2 + dig_P7) >> 4)
+        let adc_H = (getreg(0xFD) << 8) + getreg(0xFE)
+        var1 = t - 76800
+        var2 = (((adc_H << 14) - (dig_H4 << 20) - (dig_H5 * var1)) + 16384) >> 15
+        var1 = var2 * (((((((var1 * dig_H6) >> 10) * (((var1 * dig_H3) >> 11) + 32768)) >> 10) + 2097152) * dig_H2 + 8192) >> 14)
+        var2 = var1 - (((((var1 >> 15) * (var1 >> 15)) >> 7) * dig_H1) >> 4)
+        if (var2 < 0) var2 = 0
+        if (var2 > 419430400) var2 = 419430400
+        H = (var2 >> 12) / 1024
+    }
 
     /**
      * get dust value (μg/m³) 
@@ -518,218 +592,30 @@ namespace Environment {
         return Math.round(noise)
     }
 
-
-    /***************************************************************************************
-     * Functions for interfacing with the BME280
-     ***************************************************************************************/
-
-
-
-    /**
-     * Writes a value to a register on the BME280
-     */
-    function WriteBMEReg(reg: number, val: number): void {
-        pins.i2cWriteNumber(bmeAddr, reg << 8 | val, NumberFormat.Int16BE)
-    }
-
-    /**
-     * Reads a value from a register on the BME280
-     */
-    function readBMEReg(reg: number, format: NumberFormat) {
-        pins.i2cWriteNumber(bmeAddr, reg, NumberFormat.UInt8LE, false)
-        let val = pins.i2cReadNumber(bmeAddr, format, false)
-        return val
-    }
-
-    /**
-     * get BME280 value, temperature, humidity, pressure and altitude can be selected.
-     */
-    //% blockId="readbme280" block="value of BME280 %bme280type"
-    export function getbme280(bme280type: BME280Type): number {
-        switch (bme280type) {
+	//% block="value of BME280 %state"
+    export function octopus_BME280(state: BME280_state): number {
+        switch (state) {
             case 0:
-                return BME280_temperature()
+                get();
+                return Math.round(T);
                 break;
             case 1:
-                return BME280_humidity()
+                get();
+                return Math.round(H);
                 break;
             case 2:
-                return BME280_pressure()
+                get();
+                return Math.round(P / 100);
                 break;
             case 3:
-                return BME280_altitude()
+                get();
+                return (Math.round(P / 100) - 970) * 3
                 break;
             default:
-                return 0;
+                return 0
         }
-
+        return 0;
     }
-
-    /**
-     * Reads the temp from the BME sensor and uses compensation for calculator temperature.
-     * Returns 4 digit number. Value should be devided by 100 to get DegC
-     */
-    //% weight=43 blockGap=8 blockId="bme280_temperature" block="temperature(C)"
-    function BME280_temperature(): number {
-        startWeatherMonitoring()
-
-        // Read the temperature registers
-        let tempRegM = readBMEReg(tempMSB, NumberFormat.UInt16BE)
-        let tempRegL = readBMEReg(tempXlsb, NumberFormat.UInt8LE)
-
-        // Use compensation formula and return result
-        //return compensateTemp((tempRegM << 4) | (tempRegL >> 4))
-        let bme280_temperature = compensateTemp((tempRegM << 4) | (tempRegL >> 4))
-        bme280_temperature = Math.idiv(bme280_temperature, 100)
-        return bme280_temperature
-
-    }
-
-    /**
-     * Reads the humidity from the BME sensor and uses compensation for calculating humidity.
-     * returns a 5 digit number. Value should be divided by 1024 to get % relative humidity. 
-     */
-    //% weight=41 blockGap=8 blockId="bme280_humidity" block="humidity"
-    function BME280_humidity(): number {
-        startWeatherMonitoring()
-
-        // Read the pressure registers
-        let humReg = readBMEReg(humMSB, NumberFormat.UInt16BE)
-
-        // Compensate and return humidity
-        return compensateHumidity(humReg) >> 10
-    }
-
-    /**
-     * Reads the pressure from the BME sensor and uses compensation for calculating pressure.
-     * Returns an 8 digit number. Value should be divided by 25600 to get hPa. 
-     */
-    //% weight=42 blockGap=8 blockId="bme280_pressure" block="pressure"
-    function BME280_pressure(): number {
-        startWeatherMonitoring()
-
-        // Read the temperature registers
-        let pressRegM = readBMEReg(pressMSB, NumberFormat.UInt16BE)
-        let pressRegL = readBMEReg(pressXlsb, NumberFormat.UInt8LE)
-
-        // Compensate and return pressure
-        let bme280_pressure = compensatePressure((pressRegM << 4) | (pressRegL >> 4), tFine, digPBuf)
-        return Math.idiv(bme280_pressure, 25600) - 30
-    }
-
-    /**
-     * Sets up BME for in Weather Monitoring Mode.
-     */
-    //% weight=44 blockGap=8 blockId="bme280_setupBME280" block="start weather monitoring"
-    function startWeatherMonitoring(): void {
-        if (weatherMonitorStarted) return;
-
-        // The 0xE5 register is 8 bits where 4 bits go to one value and 4 bits go to another
-        let e5Val = 0
-
-        // Instantiate buffer that holds the pressure compensation values
-        digPBuf = pins.createBuffer(18)
-
-        // Set up the BME in weather monitoring mode
-        WriteBMEReg(ctrlHum, 0x01)
-        WriteBMEReg(ctrlMeas, 0x27)
-        WriteBMEReg(config, 0)
-
-        // Read the temperature registers to do a calculation and set tFine
-        let tempRegM = readBMEReg(tempMSB, NumberFormat.UInt16BE)
-        let tempRegL = readBMEReg(tempXlsb, NumberFormat.UInt8LE)
-
-        // Get the NVM digital compensations numbers from the device for temp
-        digT1Val = readBMEReg(digT1, NumberFormat.UInt16LE)
-        digT2Val = readBMEReg(digT2, NumberFormat.Int16LE)
-        digT3Val = readBMEReg(digT3, NumberFormat.Int16LE)
-
-        // Get the NVM digital compensation number from the device for pressure and pack into
-        // a buffer to pass to the C++ implementation of the compensation formula
-        digPBuf.setNumber(NumberFormat.UInt16LE, 0, readBMEReg(digP1, NumberFormat.UInt16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 2, readBMEReg(digP2, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 4, readBMEReg(digP3, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 6, readBMEReg(digP4, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 8, readBMEReg(digP5, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 10, readBMEReg(digP6, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 12, readBMEReg(digP7, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 14, readBMEReg(digP8, NumberFormat.Int16LE))
-        digPBuf.setNumber(NumberFormat.Int16LE, 16, readBMEReg(digP9, NumberFormat.Int16LE))
-
-        // Get the NVM digital compensation number from device for humidity
-        e5Val = readBMEReg(e5Reg, NumberFormat.Int8LE)
-        digH1Val = readBMEReg(digH1, NumberFormat.UInt8LE)
-        digH2Val = readBMEReg(digH2, NumberFormat.Int16LE)
-        digH3Val = readBMEReg(digH3, NumberFormat.UInt8LE)
-        digH4Val = (readBMEReg(e4Reg, NumberFormat.Int8LE) << 4) | (e5Val & 0xf)
-        digH5Val = (readBMEReg(e6Reg, NumberFormat.Int8LE) << 4) | (e5Val >> 4)
-        digH6Val = readBMEReg(digH6, NumberFormat.Int8LE)
-
-        // Compensate the temperature to calcule the tFine variable for use in other
-        // measurements
-        let temp = compensateTemp((tempRegM << 4) | (tempRegL >> 4))
-
-        weatherMonitorStarted = true;
-    }
-
-    // Global variable used in all calculations for the BME280
-    let tFine = 0
-
-    /**
-     * Returns temperature in DegC, resolution is 0.01 DegC. Output value of “5123” equals 51.23 DegC.
-     * tFine carries fine temperature as global value
-     */
-    function compensateTemp(tempRegVal: number): number {
-        let firstConv: number = (((tempRegVal >> 3) - (digT1Val << 1)) * digT2Val) >> 11
-        let secConv: number = (((((tempRegVal >> 4) - digT1Val) * ((tempRegVal >> 4) - (digT1Val))) >> 12) * (digT3Val)) >> 14
-        tFine = firstConv + secConv
-        return (tFine * 5 + 128) >> 8
-    }
-
-    /**
-     * Returns humidity in %RH as unsigned 32 bit integer in Q22.10 format (22 integer and 10 fractional bits).
-     * Output value of “47445” represents 47445/1024 = 46.333 %RH
-     */
-    function compensateHumidity(humRegValue: number): number {
-        let hum: number = (tFine - 76800)
-        hum = (((((humRegValue << 14) - (digH4Val << 20) - (digH5Val * hum)) + 16384) >> 15) * (((((((hum * digH6Val) >> 10) * (((hum * digH3Val) >> 11) + 32768)) >> 10) + 2097152) * digH2Val + 8192) >> 14))
-        hum = hum - (((((hum >> 15) * (hum >> 15)) >> 7) * digH1Val) >> 4)
-        hum = (hum < 0 ? 0 : hum)
-        hum = (hum > 419430400 ? 419430400 : hum)
-        return (hum >> 12)
-    }
-
-    /**
-     * Function used for simulator, actual implementation is in bme280.cpp
-     */
-    //% shim=Environment::compensatePressure
-    function compensatePressure(pressRegVal: number, tFine: number, compensation: Buffer) {
-        // Fake function for simulator
-        return 0
-    }
-
-    /**
-   * Reads the pressure from the BME sensor and uses compensation for calculating pressure.
-   * Returns altitude in meters based on pressure at sea level. (absolute altitude)
-   */
-    //% weight=40 blockGap=28 blockId="bme280_altitude" block="altitude(M)"
-    function BME280_altitude(): number {
-        startWeatherMonitoring();
-
-        let pressRegM = readBMEReg(pressMSB, NumberFormat.UInt16BE)
-        let pressRegL = readBMEReg(pressXlsb, NumberFormat.UInt8LE)
-        return calcAltitude((pressRegM << 4) | (pressRegL >> 4), tFine, digPBuf)
-    }
-
-    /**
-     * Function used for simulator, actual implementation is in bme280.cpp
-     */
-    //% shim=Environment::calcAltitude
-    function calcAltitude(pressRegVal: number, tFine: number, compensation: Buffer) {
-        // Fake function for simulator
-        return 0
-    }
-
 
 }
 
