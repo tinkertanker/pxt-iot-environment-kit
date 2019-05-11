@@ -609,7 +609,7 @@ namespace Environment {
                 break;
             case 3:
                 get();
-                return (Math.round(P / 100) - 970) * 3
+                return Math.round(1015 - (P / 100)) * 9
                 break;
             default:
                 return 0
