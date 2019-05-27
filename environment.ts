@@ -132,7 +132,7 @@ namespace Environment {
 
 
 
- function setreg(reg: number, dat: number): void {
+    function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
         buf[0] = reg;
         buf[1] = dat;
@@ -287,65 +287,75 @@ namespace Environment {
     //% advanced=true
     //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
     export function temperature(dht11type: DHT11Type, dht11pin: DigitalPin): number {
+
         pins.digitalWritePin(dht11pin, 0)
         basic.pause(18)
         let i = pins.digitalReadPin(dht11pin)
         pins.setPull(dht11pin, PinPullMode.PullUp);
-
-        while (pins.digitalReadPin(dht11pin) == 1);
-        while (pins.digitalReadPin(dht11pin) == 0);
-        while (pins.digitalReadPin(dht11pin) == 1);
-
-        let value = 0;
-        let counter = 0;
-        let error = 0;
-
-        for (let i = 0; i <= 32 - 1; i++) {
-            while (pins.digitalReadPin(dht11pin) == 0) {
-                //check if the wait is too long, 1000 is arbituary
-                counter++;
-                if (counter == 1000) {
-                    error = 1;
+        switch (dht11type) {
+            case 0:
+                let dhtvalue1 = 0;
+                let dhtcounter1 = 0;
+                while (pins.digitalReadPin(dht11pin) == 1);
+                while (pins.digitalReadPin(dht11pin) == 0);
+                while (pins.digitalReadPin(dht11pin) == 1);
+                for (let i = 0; i <= 32 - 1; i++) {
+                    while (pins.digitalReadPin(dht11pin) == 0);
+                    dhtcounter1 = 0
+                    while (pins.digitalReadPin(dht11pin) == 1) {
+                        dhtcounter1 += 1;
+                    }
+                    if (i > 15) {
+                        if (dhtcounter1 > 2) {
+                            dhtvalue1 = dhtvalue1 + (1 << (31 - i));
+                        }
+                    }
                 }
-            }
-            counter = 0
-            while (pins.digitalReadPin(dht11pin) == 1) {
-                counter += 1;
-            }
-            if (counter > 3) {
-                value = value + (1 << (31 - i));
-                //check if the wait is too long, 1000 is arbituary
-                if (counter >= 1000) {
-                    error = 2;
+                return ((dhtvalue1 & 0x0000ff00) >> 8);
+                break;
+            case 1:
+                while (pins.digitalReadPin(dht11pin) == 1);
+                while (pins.digitalReadPin(dht11pin) == 0);
+                while (pins.digitalReadPin(dht11pin) == 1);
+                let dhtvalue = 0;
+                let dhtcounter = 0;
+                for (let i = 0; i <= 32 - 1; i++) {
+                    while (pins.digitalReadPin(dht11pin) == 0);
+                    dhtcounter = 0
+                    while (pins.digitalReadPin(dht11pin) == 1) {
+                        dhtcounter += 1;
+                    }
+                    if (i > 15) {
+                        if (dhtcounter > 2) {
+                            dhtvalue = dhtvalue + (1 << (31 - i));
+                        }
+                    }
                 }
-            }
-        }
-        if (error == 1) {
-            return 1001;
-        }
-        else if (error == 2) {
-            return 1002;
-        }
-        else {
-            switch (dht11type) {
-                case 0:
-                    return (value & 0x0000ff00) >> 8
-                    break;
-                case 1:
-                    return ((value & 0x0000ff00) >> 8) * 9 / 5 + 32
-                    break;
-                case 2:
-                    return value >> 24
-                    break;
-                default:
-                    return 0;
-            }
-        }
+                return Math.round((((dhtvalue & 0x0000ff00) >> 8) * 9 / 5) + 32);
+                break;
+            case 2:
+                while (pins.digitalReadPin(dht11pin) == 1);
+                while (pins.digitalReadPin(dht11pin) == 0);
+                while (pins.digitalReadPin(dht11pin) == 1);
 
+                let value = 0;
+                let counter = 0;
+
+                for (let i = 0; i <= 8 - 1; i++) {
+                    while (pins.digitalReadPin(dht11pin) == 0);
+                    counter = 0
+                    while (pins.digitalReadPin(dht11pin) == 1) {
+                        counter += 1;
+                    }
+                    if (counter > 3) {
+                        value = value + (1 << (7 - i));
+                    }
+                }
+                return value;
+            default:
+                return 0;
+        }
     }
-
-
-
 
 
 
@@ -592,7 +602,7 @@ namespace Environment {
         return Math.round(noise)
     }
 
-	//% block="value of BME280 %state"
+    //% block="value of BME280 %state"
     export function octopus_BME280(state: BME280_state): number {
         switch (state) {
             case 0:
