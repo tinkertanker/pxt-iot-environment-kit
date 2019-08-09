@@ -12,7 +12,8 @@
     "files": [
         "environment.ts",
         "README.md",
-        "_locales/zh/Environment-and-Science-IoT-strings.json"
+        "_locales/zh-tw/Environment-and-Science-IoT-strings.json",
+        "_locales/zh-cn/Environment-and-Science-IoT-strings.json"
     ],
     "testFiles": [
         "tests.ts"
