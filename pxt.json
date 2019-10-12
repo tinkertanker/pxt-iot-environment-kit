@@ -13,7 +13,8 @@
         "environment.ts",
         "README.md",
         "_locales/zh-tw/Environment-and-Science-IoT-strings.json",
-        "_locales/zh-cn/Environment-and-Science-IoT-strings.json"
+        "_locales/zh-cn/Environment-and-Science-IoT-strings.json",
+        "ds18b20.cpp"
     ],
     "testFiles": [
         "tests.ts"

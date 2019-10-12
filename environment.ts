@@ -126,11 +126,31 @@ namespace Environment {
         //% block="altitude(M)" enumval=3
         BME280_altitude,
     }
-
-
-
-
-
+	
+     export enum DS18B20_pin {
+       //% block=P0
+       pin0 = 0,
+       //% block=P1
+       pin1 = 1,
+       //% block=P2
+       pin2 = 2,
+       //% block=P5
+       pin5 = 5,
+       //% block=P8
+       pin8 = 8,
+       //% block=P11
+       pin11 = 11,
+       //% block=P12
+       pin12 = 12,
+       //% block=P13
+       pin13 = 13,
+       //% block=P14
+       pin14 = 14,
+       //% block=P15
+       pin15 = 15,
+       //% block=P16
+       pin16 = 16
+     }
 
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
@@ -286,7 +306,7 @@ namespace Environment {
      * @param dht11pin describe parameter here, eg: DigitalPin.P15     */
     //% advanced=true
     //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
-    export function temperature(dht11type: DHT11Type, dht11pin: DigitalPin): number {
+    export function dht11value(dht11type: DHT11Type, dht11pin: DigitalPin): number {
 
         pins.digitalWritePin(dht11pin, 0)
         basic.pause(18)
@@ -626,6 +646,20 @@ namespace Environment {
         }
         return 0;
     }
-
+    //% shim=DS18B20::Temperature
+    export function Temperature_read(p: number): number {
+        // Fake function for simulator
+        return 0
+    }
+    
+    //% block="value of ds18b20 Temperature(℃) at pin %p"
+    //% p.fieldEditor="gridpicker" p.fieldOptions.columns=4
+    //% advanced=true
+    export function Temperature18b20(p: DS18B20_pin): number {
+        // Fake function for simulator
+        let temp = Temperature_read(p)
+        temp = temp / 100
+        return temp
+    }
 }
 
