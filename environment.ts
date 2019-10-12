@@ -311,7 +311,7 @@ namespace Environment {
      * @param dht11pin describe parameter here, eg: DigitalPin.P15     */
     //% advanced=true
     //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
-    export function temperature(dht11type: DHT11Type, dht11pin: DigitalPin): number {
+    export function dht11value(dht11type: DHT11Type, dht11pin: DigitalPin): number {
 
         pins.digitalWritePin(dht11pin, 0)
         basic.pause(18)
@@ -652,7 +652,7 @@ namespace Environment {
         return 0;
     }
     //% shim=DS18B20::Temperature
-    export function Temperature(p: number): number {
+    export function Temperature_read(p: number): number {
         // Fake function for simulator
         return 0
     }
@@ -660,9 +660,9 @@ namespace Environment {
     //% block="value of ds18b20 Temperature(℃) at pin %p"
     //% p.fieldEditor="gridpicker" p.fieldOptions.columns=4
     //% advanced=true
-    export function TemperatureNumber(p: DS18B20_pin): number {
+    export function Temperature18b20(p: DS18B20_pin): number {
         // Fake function for simulator
-        let temp = Temperature(p)
+        let temp = Temperature_read(p)
         temp = temp / 100
         return temp
     }
