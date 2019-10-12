@@ -127,7 +127,7 @@ namespace Environment {
         BME280_altitude,
     }
 	
-     export enum 18b20_pin {
+     export enum DS18B20_pin {
        //% block=pin0
        pin0 = 0,
        //% block=pin1
@@ -657,11 +657,10 @@ namespace Environment {
         return 0
     }
     
-    //% weight=10 blockId="Temperature_number" 
-    //% block="|%p| Temperature_number "
+    //% block="value of ds18b20 Temperature(℃) at pin %p"
     //% p.fieldEditor="gridpicker" p.fieldOptions.columns=4
     //% advanced=true
-    export function TemperatureNumber(p: 18b20_pin): number {
+    export function TemperatureNumber(p: DS18B20_pin): number {
         // Fake function for simulator
         let temp = Temperature(p)
         temp = temp / 100
