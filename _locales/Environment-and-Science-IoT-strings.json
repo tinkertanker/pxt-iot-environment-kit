@@ -19,7 +19,8 @@
   "Environment.ReadWindSpeed|block": "value of wind speed(m/s) at pin %windspeedpin",
   "Environment.octopus_BME280|block": "value of BME280 %state",
   "Environment.sonarbit_distance|block": "Ultrasonic distance in unit %distance_unit |at|pin %pin",
-  "Environment.temperature|block": "value of dht11 %dht11type| at pin %dht11pin",
+  "Environment.dht11value|block": "value of dht11 %dht11type| at pin %dht11pin",
+  "Environment.Temperature18b20": "value of ds18b20 Temperature(℃) at pin %p",
   "Environment|block": "Octopus",
   "{id:category}Environment": "Environment"
 }
