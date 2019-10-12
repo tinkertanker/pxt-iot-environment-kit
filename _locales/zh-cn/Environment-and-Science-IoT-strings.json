@@ -20,7 +20,7 @@
   "Environment.octopus_BME280|block": "BME280传感器 的 %state 值",
   "Environment.sonarbit_distance|block": "超声波测距单位 %distance_unit |连接至 %pin 的距离值",
   "Environment.dht11value|block": "DHT11传感器的 %dht11type|值 连接至 %dht11pin",
-  "Environment.Temperature18b20": "连接至 %DS18B20_pin DS18B20的摄氏温度值(℃)",
+  "Environment.Temperature18b20|block": "连接至 %DS18B20_pin DS18B20的摄氏温度值(℃)",
   "Environment|block": "八爪鱼环境模块",
   "{id:category}Environment": "八爪鱼环境模块"
 }

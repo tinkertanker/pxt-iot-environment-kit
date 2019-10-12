@@ -20,7 +20,7 @@
   "Environment.octopus_BME280|block": "取值 BME280 %bme280type",
   "Environment.sonarbit_distance|block": "超音波測距單位 %distance_unit| 在腳位 %pin",
   "Environment.dht11value|block": "取得 %dht11type| 在腳位 %dht11pin",
-  "Environment.Temperature18b20": "在腳位 %DS18B20_pin DS18B20的攝氏溫度(℃)",
+  "Environment.Temperature18b20|block": "在腳位 %DS18B20_pin DS18B20的攝氏溫度(℃)",
   "Environment|block": "環境章魚",
   "{id:category}Environment": "環境"
 }
