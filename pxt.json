@@ -5,7 +5,7 @@
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "OLED": "github:Tinkertanker/pxt-oled-ssd1306",
+        "OLED": "github:tinkertanker/pxt-oled-ssd1306",
         "ds1307": "github:elecfreaks/pxt-ds1307-rtc",
         "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot#v0.0.6"
     },
