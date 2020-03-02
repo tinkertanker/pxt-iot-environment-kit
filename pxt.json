@@ -7,7 +7,7 @@
         "core": "*",
         "SSD1306_OLED": "github:tinkertanker/pxt-oled-ssd1306",
         "ds1307": "github:elecfreaks/pxt-realtimeclock",
-        "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot"
+        "ESP8266_IoT": "github:RBilsland/pxt-esp8266iot"
     },
     "files": [
         "environment.ts",
