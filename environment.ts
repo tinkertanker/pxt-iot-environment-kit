@@ -395,7 +395,6 @@ namespace Environment {
         while (pins.digitalReadPin(pm25pin) != 0) {
         }
         pm25 = input.runningTimeMicros() - pm25
-        pm25 = pm25 / 1000 - 2
         return pm25;
     }
 
