@@ -6,7 +6,7 @@
     "dependencies": {
         "core": "*",
         "SSD1306_OLED": "github:elecfreaks/pxt-ssd1306-oled",
-        "ds1307": "github:elecfreaks/pxt-realtimeclock",
+        "ds1307": "github:elecfreaks/pxt-ds1307-rtc",
         "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot"
     },
     "files": [
