@@ -391,10 +391,10 @@ namespace Environment {
         }
         while (pins.digitalReadPin(pm25pin) != 1) {
         }
-        pm25 = input.runningTimeMicros()
+        pm25 = input.runningTime()
         while (pins.digitalReadPin(pm25pin) != 0) {
         }
-        pm25 = input.runningTimeMicros() - pm25
+        pm25 = input.runningTime() - pm25
         return pm25;
     }
 
