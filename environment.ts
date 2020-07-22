@@ -227,7 +227,7 @@ namespace Environment {
             0,
             1023,
             0,
-            Reference_VOLTAGE / 2 * 3
+            Reference_VOLTAGE
         );
         dust = (voltage - 380) * 5 / 29;
         if (dust < 0) {
@@ -276,30 +276,6 @@ namespace Environment {
         }
 
     }
-
-
-
-    /**
-     * get TMP36 Temperature(℃)
-     * @param temppin describe parameter here, eg: AnalogPin.P1
-     */
-    //% blockId="readtemp" block="read temperature(℃) at pin %temppin"
-
-    /*
-    export function ReadTemperature(temppin: AnalogPin): number {
-        let voltage = 0;
-        let Temperature = 0;
-        voltage = pins.map(
-            pins.analogReadPin(temppin),
-            0,
-            1023,
-            0,
-            reference_voltage
-        );
-        Temperature = (voltage - 500) / 10;
-        return Temperature;
-    }
-    */
 
     /**
      * get dht11 temperature and humidity Value
