@@ -619,20 +619,5 @@ namespace Environment {
         }
         return 0;
     }
-    //% shim=DS18B20::Temperature
-    export function Temperature_read(p: number): number {
-        // Fake function for simulator
-        return 0
-    }
-    
-    //% block="value of ds18b20 Temperature(℃) at pin %p"
-    //% p.fieldEditor="gridpicker" p.fieldOptions.columns=4
-    //% advanced=true
-    export function Temperature18b20(p: DS18B20_pin): number {
-        // Fake function for simulator
-        let temp = Temperature_read(p)
-        temp = temp / 100
-        return temp
-    }
 }
 
