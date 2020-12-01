@@ -125,30 +125,6 @@ namespace Environment {
         BME280_altitude,
     }
 	
-     export enum DS18B20_pin {
-       //% block=P0
-       pin0 = 0,
-       //% block=P1
-       pin1 = 1,
-       //% block=P2
-       pin2 = 2,
-       //% block=P5
-       pin5 = 5,
-       //% block=P8
-       pin8 = 8,
-       //% block=P11
-       pin11 = 11,
-       //% block=P12
-       pin12 = 12,
-       //% block=P13
-       pin13 = 13,
-       //% block=P14
-       pin14 = 14,
-       //% block=P15
-       pin15 = 15,
-       //% block=P16
-       pin16 = 16
-     }
 
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
