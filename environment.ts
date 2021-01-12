@@ -638,5 +638,32 @@ namespace Environment {
                 return 0
         }
     }
+    /**
+     * get dust value (μg/m³) 
+     * @param Rjpin describe parameter here, eg: Rjpin.J1
+     */
+    //% blockId="readdust" block="Dust sensor vo:%vo_pin vLED:%vLED_pin value (μg/m³)"
+    export function Dust(vo_pin: AnalogPin,vLED_pin:DigitalPin): number {
+        let voltage = 0
+        let dust = 0
+        pins.digitalWritePin(vLED_pin, 0);
+        control.waitMicros(160);
+        voltage = pins.analogReadPin(vo_pin);
+        control.waitMicros(100);
+        pins.digitalWritePin(vLED_pin, 1);
+        voltage = pins.map(
+            voltage,
+            0,
+            1023,
+            0,
+            3100 / 2 * 3
+        );
+        dust = (voltage - 380) * 5 / 29;
+        if (dust < 0) {
+            dust = 0
+        }
+        return Math.round(dust)
+
+    }
 }
 
