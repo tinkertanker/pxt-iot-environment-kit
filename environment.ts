@@ -3,16 +3,7 @@
  */
 //% color=#ff7a4b icon="\uf0ee" block="Octopus"
 namespace Environment {
-
-    // keep track of services
-    //let rainMonitorStarted = false;
-    //let windMonitorStarted = false;
     let weatherMonitorStarted = false;
-    // Keep Track of weather monitoring variables
-    //let numRainDumps = 0
-    //let numWindTurns = 0
-    //let windMPH = 0
-
     // BME280 Addresses
     let BME280_I2C_ADDR = 0x76
     let dig_T1 = getUInt16LE(0x88)
