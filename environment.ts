@@ -657,5 +657,22 @@ namespace Environment {
         );
         return Math.round(UVlevel)
     }
+        /**
+    * toggle led
+    */
+    //% blockId=LED block="LED %pin toggle to $ledstate || brightness %brightness \\%"
+    //% brightness.min=0 brightness.max=100
+    //% ledstate.shadow="toggleOnOff"
+    //% expandableArgumentMode="toggle"
+    export function ledBrightness(pin: AnalogPin, ledstate: boolean, brightness: number = 100): void {
+        if (ledstate) {
+            pins.analogSetPeriod(pin, 100)
+            pins.analogWritePin(pin, Math.map(brightness, 0, 100, 0, 1023))
+        }
+        else {
+            pins.analogWritePin(pin, 0)
+            brightness = 0
+        }
+    }
 }
 
