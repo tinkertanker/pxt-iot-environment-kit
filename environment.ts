@@ -638,6 +638,24 @@ namespace Environment {
                 return 0
         }
     }
-
+        /**
+    * get UV level value (0~15)
+    * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
+    */
+    //% blockId="readUVLevel" block="UV sensor %Rjpin level(0~15)"
+    export function UVLevel(pin: AnalogPin): number {
+        let UVlevel = pins.analogReadPin(pin);
+        if (UVlevel > 625) {
+            UVlevel = 625
+        }
+        UVlevel = pins.map(
+            UVlevel,
+            0,
+            625,
+            0,
+            15
+        );
+        return Math.round(UVlevel)
+    }
 }
 
