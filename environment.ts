@@ -233,7 +233,7 @@ let sc_byte = 0
         return dat
     }
     //% block="value of DS18B20 %state at pin %pin"
-    export function Ds18b20Temp(state:ValType,pin:DigitalPin):number{
+    export function Ds18b20Temp(pin:DigitalPin,state:ValType):number{
         init_18b20(pin)
         write_18b20(pin,0xCC)
         write_18b20(pin,0x44)
