@@ -1,5 +1,6 @@
 {
   "Environment": "Custom blocks",
+  "Environment.PIR": "TODO: Detect soil moisture value(0~100%)",
   "Environment.ReadDust": "get dust value (μg/m³)",
   "Environment.ReadDust|param|vLED": "describe parameter here, eg: DigitalPin.P16",
   "Environment.ReadDust|param|vo": "describe parameter here, eg: AnalogPin.P1",
@@ -17,8 +18,10 @@
   "Environment.ReadWaterLevel|param|waterlevelpin": "describe parameter here, eg: AnalogPin.P1",
   "Environment.ReadWindSpeed": "get wind speed value (m/s)",
   "Environment.ReadWindSpeed|param|windspeedpin": "describe parameter here, eg: AnalogPin.P1",
-  "Environment.dht11value": "get TMP36 Temperature(℃)\r\r\n\r\nget dht11 temperature and humidity Value",
+  "Environment.UVLevel": "get UV level value (0~15)",
+  "Environment.dht11value": "get dht11 temperature and humidity Value",
   "Environment.dht11value|param|dht11pin": "describe parameter here, eg: DigitalPin.P15     ",
+  "Environment.ledBrightness": "toggle led",
   "Environment.sonarbit_distance": "get Ultrasonic(sonar:bit) distance",
   "Environment.sonarbit_distance|param|distance_unit": "describe parameter here, eg: 1",
   "Environment.sonarbit_distance|param|pin": "describe parameter here, eg: DigitalPin.P16"
