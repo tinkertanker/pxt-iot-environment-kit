@@ -686,38 +686,6 @@ let sc_byte = 0
             return false
         }
     }
-    /**
-* get Ultrasonic distance
-*/
-    //% blockId=sonarbit block="Ultrasonic sensor Trig%pinT Echo%pinE distance %distance_unit"
-    //% distance_unit.fieldEditor="gridpicker"
-    //% distance_unit.fieldOptions.columns=2
-    export function ultrasoundSensor(pinT: DigitalPin,pinE:DigitalPin, distance_unit: Distance_Unit_List): number {
-        pins.setPull(pinT, PinPullMode.PullNone)
-        pins.digitalWritePin(pinT, 0)
-        control.waitMicros(2)
-        pins.digitalWritePin(pinT, 1)
-        control.waitMicros(10)
-        pins.digitalWritePin(pinT, 0)
-
-        // read pulse
-        let d = pins.pulseIn(pinE, PulseValue.High, 25000)
-        let distance = d * 9 / 6 / 58
-
-        if (distance > 400) {
-            distance = 0
-        }
-        switch (distance_unit) {
-            case Distance_Unit_List.Distance_Unit_cm:
-                return Math.floor(distance)  //cm
-                break
-            case Distance_Unit_List.Distance_Unit_inch:
-                return Math.floor(distance / 254)   //inch
-                break
-            default:
-                return 0
-        }
-    }
         /**
     * get UV level value (0~15)
     * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
