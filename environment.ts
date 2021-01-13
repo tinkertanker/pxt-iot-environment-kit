@@ -77,14 +77,6 @@ namespace Environment {
 
     let Reference_VOLTAGE = 3100
 
-    export enum Distance_Unit_List {
-        //% block="cm" 
-        Distance_Unit_cm,
-
-        //% block="inch"
-        Distance_Unit_inch,
-    }
-
     export enum DHT11Type {
         //% block="temperature(℃)" enumval=0
         DHT11_temperature_C,
