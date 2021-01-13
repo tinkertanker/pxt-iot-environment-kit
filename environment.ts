@@ -3,13 +3,7 @@
  */
 //% color=#ff7a4b icon="\uf0ee" block="Octopus"
 namespace Environment {
-    export enum Distance_Unit_List {
-        //% block="cm" 
-        Distance_Unit_cm,
 
-        //% block="inch"
-        Distance_Unit_inch,
-    }
     let weatherMonitorStarted = false;
     // BME280 Addresses
     let BME280_I2C_ADDR = 0x76
@@ -83,7 +77,13 @@ namespace Environment {
 
     let Reference_VOLTAGE = 3100
 
+    export enum Distance_Unit_List {
+        //% block="cm" 
+        Distance_Unit_cm,
 
+        //% block="inch"
+        Distance_Unit_inch,
+    }
 
     export enum DHT11Type {
         //% block="temperature(℃)" enumval=0
