@@ -328,73 +328,53 @@ let sc_byte = 0
     //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
     export function dht11value(dht11type: DHT11Type, dht11pin: DigitalPin): number {
 
-        pins.digitalWritePin(dht11pin, 0)
+        //initialize
+        let _temperature: number = -999.0
+        let _humidity: number = -999.0
+        let checksum: number = 0
+        let checksumTmp: number = 0
+        let dataArray: boolean[] = []
+        let resultArray: number[] = []
+        for (let index = 0; index < 40; index++) dataArray.push(false)
+        for (let index = 0; index < 5; index++) resultArray.push(0)
+
+        pins.setPull(dht11pin, PinPullMode.PullUp)
+        pins.digitalWritePin(dht11pin, 0) //begin protocol, pull down pin
         basic.pause(18)
-        let i = pins.digitalReadPin(dht11pin)
-        pins.setPull(dht11pin, PinPullMode.PullUp);
-        switch (dht11type) {
-            case 0:
-                let dhtvalue1 = 0;
-                let dhtcounter1 = 0;
-                while (pins.digitalReadPin(dht11pin) == 1);
-                while (pins.digitalReadPin(dht11pin) == 0);
-                while (pins.digitalReadPin(dht11pin) == 1);
-                for (let i = 0; i <= 32 - 1; i++) {
-                    while (pins.digitalReadPin(dht11pin) == 0);
-                    dhtcounter1 = 0
-                    while (pins.digitalReadPin(dht11pin) == 1) {
-                        dhtcounter1 += 1;
-                    }
-                    if (i > 15) {
-                        if (dhtcounter1 > 2) {
-                            dhtvalue1 = dhtvalue1 + (1 << (31 - i));
-                        }
-                    }
-                }
-                return ((dhtvalue1 & 0x0000ff00) >> 8);
-                break;
-            case 1:
-                while (pins.digitalReadPin(dht11pin) == 1);
-                while (pins.digitalReadPin(dht11pin) == 0);
-                while (pins.digitalReadPin(dht11pin) == 1);
-                let dhtvalue = 0;
-                let dhtcounter = 0;
-                for (let i = 0; i <= 32 - 1; i++) {
-                    while (pins.digitalReadPin(dht11pin) == 0);
-                    dhtcounter = 0
-                    while (pins.digitalReadPin(dht11pin) == 1) {
-                        dhtcounter += 1;
-                    }
-                    if (i > 15) {
-                        if (dhtcounter > 2) {
-                            dhtvalue = dhtvalue + (1 << (31 - i));
-                        }
-                    }
-                }
-                return Math.round((((dhtvalue & 0x0000ff00) >> 8) * 9 / 5) + 32);
-                break;
-            case 2:
-                while (pins.digitalReadPin(dht11pin) == 1);
-                while (pins.digitalReadPin(dht11pin) == 0);
-                while (pins.digitalReadPin(dht11pin) == 1);
+        pins.digitalReadPin(dht11pin) //pull up pin
+        control.waitMicros(40)
+        while (pins.digitalReadPin(dht11pin) == 0); //sensor response
+        while (pins.digitalReadPin(dht11pin) == 1); //sensor response
 
-                let value = 0;
-                let counter = 0;
-
-                for (let i = 0; i <= 8 - 1; i++) {
-                    while (pins.digitalReadPin(dht11pin) == 0);
-                    counter = 0
-                    while (pins.digitalReadPin(dht11pin) == 1) {
-                        counter += 1;
-                    }
-                    if (counter > 3) {
-                        value = value + (1 << (7 - i));
-                    }
-                }
-                return value;
-            default:
-                return 0;
+        //read data (5 bytes)
+        for (let index = 0; index < 40; index++) {
+            while (pins.digitalReadPin(dht11pin) == 1);
+            while (pins.digitalReadPin(dht11pin) == 0);
+            control.waitMicros(28)
+            //if sensor still pull up data pin after 28 us it means 1, otherwise 0
+            if (pins.digitalReadPin(dht11pin) == 1) dataArray[index] = true
         }
+        //convert byte number array to integer
+        for (let index = 0; index < 5; index++)
+            for (let index2 = 0; index2 < 8; index2++)
+                if (dataArray[8 * index + index2]) resultArray[index] += 2 ** (7 - index2)
+        //verify checksum
+        checksumTmp = resultArray[0] + resultArray[1] + resultArray[2] + resultArray[3]
+        checksum = resultArray[4]
+        if (checksumTmp >= 512) checksumTmp -= 512
+        if (checksumTmp >= 256) checksumTmp -= 256
+        switch (dht11type){
+            case DHT11Type.DHT11_temperature_C:
+                _temperature = resultArray[2] + resultArray[3] / 100
+                return _temperature
+            case DHT11Type.DHT11_temperature_F:
+                _temperature = resultArray[2] + resultArray[3] / 100 * 33.8
+                return _temperature
+            case DHT11Type.DHT11_humidity:
+                _humidity = resultArray[0] + resultArray[1] / 100
+                return _humidity
+        }
+        return 0
     }
 
 
