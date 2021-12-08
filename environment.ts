@@ -329,6 +329,7 @@ let sc_byte = 0
     export function dht11value(dht11type: DHT11Type, dht11pin: DigitalPin): number {
 
         //initialize
+	basic.pause(1100)
         let _temperature: number = -999.0
         let _humidity: number = -999.0
         let checksum: number = 0
