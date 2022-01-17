@@ -21,6 +21,9 @@
   "Environment.sonarbit_distance|block": "超音波測距單位 %distance_unit| 在腳位 %pin",
   "Environment.dht11value|block": "取得 %dht11type| 在腳位 %dht11pin",
   "Environment.Temperature18b20|block": "在腳位 %DS18B20_pin DS18B20的攝氏溫度(℃)",
+  "Environment.readDataBlock|block": "RFID 傳感器 IIC接口 從卡中讀取數據",
+  "Environment.writeData|block": "RFID 傳感器 IIC接口 將數據 %data 寫入卡",
+  "Environment.checkCard|block": "RFID 傳感器 IIC接口 檢測到卡片",
   "Environment|block": "環境章魚",
   "{id:category}Environment": "環境"
 }

@@ -28,6 +28,9 @@
   "Environment.ledBrightness|block": "LED %pin toggle to $ledstate || brightness %brightness \\%",
   "Environment.octopus_BME280|block": "value of BME280 %state",
   "Environment.sonarbit_distance|block": "Ultrasonic distance in unit %distance_unit |at|pin %pin",
+  "Environment.readDataBlock|block": "RFID sensor IIC port read data from card",
+  "Environment.writeData|block": "RFID sensor IIC port write %data to card",
+  "Environment.checkCard|block": "RFID sensor IIC port Detect Card",
   "Environment|block": "Octopus",
   "{id:category}Environment": "Environment"
 }
