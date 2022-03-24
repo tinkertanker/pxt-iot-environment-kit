@@ -437,7 +437,7 @@ namespace Environment {
 
     }
 
-    let dht11_resultArray: number[] = []
+    let dht11_resultArray: number[] = [0,0,0,0,0]
     let dht11_pin = 0
 
     // function get_dht11value(){
@@ -497,7 +497,8 @@ namespace Environment {
         let last_time: number = 0
 
         for (let index = 0; index < 40; index++) dataArray.push(false)
-        for (let index = 0; index < 5; index++) dht11_resultArray.push(0)
+        //for (let index = 0; index < 5; index++) dht11_resultArray.push(0)
+        dht11_resultArray = [0,0,0,0,0]
 
         pins.setPull(dht11_pin, PinPullMode.PullUp)
         pins.digitalWritePin(dht11_pin, 0) //begin protocol, pull down pin
