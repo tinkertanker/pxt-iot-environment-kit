@@ -437,8 +437,9 @@ namespace Environment {
 
     }
 
-    let dht11_resultArray: number[] = [0,0,0,0,0]
+    let dht11_resultArray: number[] = []
     let dht11_pin = 0
+    let dht11_first_flag = 1
 
     // function get_dht11value(){
 
@@ -490,6 +491,10 @@ namespace Environment {
         if (dht11_pin == 0) {
             return
         }
+        if(dht11_first_flag == 0){
+            dht11_first_flag = -1
+            return
+        }
 
         let checksum: number = 0
         let checksumTmp: number = 0
@@ -497,8 +502,9 @@ namespace Environment {
         let last_time: number = 0
 
         for (let index = 0; index < 40; index++) dataArray.push(false)
-        //for (let index = 0; index < 5; index++) dht11_resultArray.push(0)
-        dht11_resultArray = [0,0,0,0,0]
+        for (let index = 0; index < 5; index++) dht11_resultArray.pop()
+        for (let index = 0; index < 5; index++) dht11_resultArray.push(0)
+        //dht11_resultArray = [0,0,0,0,0]
 
         pins.setPull(dht11_pin, PinPullMode.PullUp)
         pins.digitalWritePin(dht11_pin, 0) //begin protocol, pull down pin
@@ -541,6 +547,53 @@ namespace Environment {
         //initialize
         let _temperature: number = -999.0
         let _humidity: number = -999.0
+
+
+
+        if(dht11_first_flag == 1){
+            let checksum: number = 0
+            let checksumTmp: number = 0
+            let dataArray: boolean[] = []
+            let last_time: number = 0
+
+            for (let index = 0; index < 40; index++) dataArray.push(false)
+            for (let index = 0; index < 5; index++) dht11_resultArray.push(0)
+            //dht11_resultArray = [0,0,0,0,0]
+
+            pins.setPull(dht11pin, PinPullMode.PullUp)
+            pins.digitalWritePin(dht11pin, 0) //begin protocol, pull down pin
+            basic.pause(18)
+            pins.digitalReadPin(dht11pin) //pull up pin
+            control.waitMicros(40)
+            last_time = control.micros()
+            while (pins.digitalReadPin(dht11pin) == 0 && control.micros() - last_time < 100); //sensor response
+            last_time = control.micros()
+            while (pins.digitalReadPin(dht11pin) == 1 && control.micros() - last_time < 100); //sensor response
+
+            //read data (5 bytes)
+            for (let index = 0; index < 40; index++) {
+                last_time = control.micros()
+                while (pins.digitalReadPin(dht11pin) == 1 && control.micros() - last_time < 80);
+                last_time = control.micros()
+                while (pins.digitalReadPin(dht11pin) == 0 && control.micros() - last_time < 60);
+                control.waitMicros(28)
+                //if sensor still pull up data pin after 28 us it means 1, otherwise 0
+                if (pins.digitalReadPin(dht11pin) == 1) dataArray[index] = true
+            }
+            //convert byte number array to integer
+            for (let index = 0; index < 5; index++)
+                for (let index2 = 0; index2 < 8; index2++)
+                    if (dataArray[8 * index + index2]) dht11_resultArray[index] += 2 ** (7 - index2)
+            //verify checksum
+            checksumTmp = dht11_resultArray[0] + dht11_resultArray[1] + dht11_resultArray[2] + dht11_resultArray[3]
+            checksum = dht11_resultArray[4]
+            if (checksumTmp >= 512) checksumTmp -= 512
+            if (checksumTmp >= 256) checksumTmp -= 256
+            dht11_first_flag = 0
+        }
+
+
+
 
         dht11_pin = dht11pin
 
