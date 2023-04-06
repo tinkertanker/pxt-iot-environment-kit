@@ -361,7 +361,7 @@ namespace Environment {
             case ValType.DS18B20_temperature_C:
                 return temperature
             case ValType.DS18B20_temperature_F:
-                temperature = temperature * 33.8
+                temperature = (temperature * 1.8) + 32
                 return temperature
             default:
                 return 0

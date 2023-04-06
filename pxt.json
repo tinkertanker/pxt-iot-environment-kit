@@ -1,6 +1,6 @@
 {
     "name": "Environment-and-Science-IoT",
-    "version": "5.1.7",
+    "version": "5.1.8",
     "description": "Environment and Science IoT Kit for micro:bit",
     "license": "MIT",
     "dependencies": {
@@ -19,7 +19,7 @@
     ],
     "public": true,
     "targetVersions": {
-        "target": "4.0.18",
+        "target": "5.0.12",
         "targetId": "microbit"
     },
     "supportedTargets": [
