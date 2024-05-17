@@ -1,6 +1,6 @@
 {
     "name": "Environment-and-Science-IoT",
-    "version": "5.2.4",
+    "version": "5.2.5",
     "description": "Environment and Science IoT Kit for micro:bit",
     "license": "MIT",
     "dependencies": {
@@ -12,7 +12,8 @@
     "files": [
         "environment.ts",
         "README.md",
-        "_locales/zh/Environment-and-Science-IoT-strings.json"
+        "_locales/zh/Environment-and-Science-IoT-strings.json",
+        "_locales/zh-TW/Environment-and-Science-IoT-strings.json"
     ],
     "testFiles": [
         "tests.ts"
