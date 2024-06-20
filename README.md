@@ -89,15 +89,3 @@ basic.forever(() => {
 MIT
 
 
-## Supported targets
-
-* for PXT/microbit
-(The metadata above is needed for package search.)
-
-```package
-environment=github:sunnyrainwss/pxt-iot-environment-kit
-iot=github:sunnyrainwss/pxt-iot-environment-kit
-```
-
-
-
