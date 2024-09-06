@@ -19,6 +19,7 @@
   "Environment.ReadWindSpeed": "get wind speed value (m/s)",
   "Environment.ReadWindSpeed|param|windspeedpin": "describe parameter here, eg: AnalogPin.P1",
   "Environment.UVLevel": "get UV level value (0~15)",
+  "Environment.Crash": "Return to the collision sensor status",
   "Environment.dht11value": "get dht11 temperature and humidity Value",
   "Environment.dht11value|param|dht11pin": "describe parameter here, eg: DigitalPin.P15     ",
   "Environment.ledBrightness": "toggle led",

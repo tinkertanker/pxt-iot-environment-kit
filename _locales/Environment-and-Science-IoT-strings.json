@@ -22,6 +22,7 @@
   "Environment.ReadWaterLevel|block": "value of water level(0~100) at pin %waterlevelpin",
   "Environment.ReadWindSpeed|block": "value of wind speed(m/s) at pin %windspeedpin",
   "Environment.UVLevel|block": "UV sensor %Rjpin level(0~15)",
+  "Environment.Crash|block": "Return to the collision sensor status",
   "Environment.ValType.DS18B20_temperature_C|block": "temperature(℃)",
   "Environment.ValType.DS18B20_temperature_F|block": "temperature(℉)",
   "Environment.dht11value|block": "value of dht11 %dht11type| at pin %dht11pin",

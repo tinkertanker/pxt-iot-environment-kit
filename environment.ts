@@ -821,6 +821,22 @@ namespace Environment {
             return false
         }
     }
+
+    /**
+    * Return to the collision sensor status, on or off
+    * @param Rjpin describe parameter here, eg: DigitalRJPin.P1
+    */
+    //% blockId=Crash block="Crash Sensor %Rjpin is pressed"
+    export function Crash(Rjpin: DigitalRJPin): boolean {
+        pins.setPull(Rjpin, PinPullMode.PullUp)
+        if (pins.digitalReadPin(Rjpin) == 0) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
         /**
     * get UV level value (0~15)
     * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
