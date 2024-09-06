@@ -827,9 +827,9 @@ namespace Environment {
     * @param Rjpin describe parameter here, eg: DigitalRJPin.P1
     */
     //% blockId=Crash block="Crash Sensor %Rjpin is pressed"
-    export function Crash(Rjpin: DigitalRJPin): boolean {
-        pins.setPull(Rjpin, PinPullMode.PullUp)
-        if (pins.digitalReadPin(Rjpin) == 0) {
+    export function Crash(pin: DigitalRJPin): boolean {
+        pins.setPull(pin, PinPullMode.PullUp)
+        if (pins.digitalReadPin(pin) == 0) {
             return true
         }
         else {
