@@ -416,7 +416,8 @@ namespace Environment {
 
         // read pulse
         let d = pins.pulseIn(pin, PulseValue.High, 23000)  // 8 / 340 = 
-        let distance = d * 10 * 5 / 3 / 58
+        // let distance = d * 10 * 5 / 3 / 58
+        let distance = d * 10 / 58
 
         if (distance > 4000) distance = 0
 
