@@ -869,8 +869,8 @@ namespace Environment {
             PHlevel,
             0,
             1023,
-            0,
-            14
+            14,
+            0
         );
         return Math.round(PHlevel * 10) / 10; 
     }
