@@ -857,6 +857,24 @@ namespace Environment {
         );
         return Math.round(UVlevel)
     }
+
+    /**
+    * get PH level value (0~14)
+    * @param pin describe parameter here, eg: AnalogPin.P1
+    */
+    //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
+    export function readPHLevel(pin: AnalogPin): number {
+        let PHlevel = pins.analogReadPin(pin);
+        PHlevel = pins.map(
+            PHlevel,
+            0,
+            1023,
+            0,
+            14
+        );
+        return Math.round(PHlevel * 10) / 10; 
+    }
+
         /**
     * toggle led
     */
