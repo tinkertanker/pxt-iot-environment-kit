@@ -864,8 +864,12 @@ namespace Environment {
     */
     //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
     export function readPHLevel(pin: AnalogPin): number {
-        let PHlevel = pins.analogReadPin(pin);
-        PHlevel = PHlevel*1.0/1023 * 3.3 * (-5.7541) + 16.654
+        let PHlevel = 0;
+        for(let i = 0; i < 10; i++){
+            PHlevel += pins.analogReadPin(pin);
+            basic.pause(10);
+        }
+        PHlevel = PHlevel*1.0/10/1023 * 3.3 * (-5.7541) + 16.654
         if (PHlevel > 14) {
             PHlevel = 14.00
         }
