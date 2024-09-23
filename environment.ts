@@ -867,12 +867,12 @@ namespace Environment {
         let PHlevel = pins.analogReadPin(pin);
         PHlevel = PHlevel*1.0/1023 * 3.3 * (-5.7541) + 16.654
         if (PHlevel > 14) {
-            PHlevel = 14
+            PHlevel = 14.00
         }
         else if (PHlevel < 0) {
-            PHlevel = 0
+            PHlevel = 0.00
         }
-        return Math.round(PHlevel * 10) / 10; 
+        return Math.round(PHlevel * 100) / 100; 
     }
 
         /**
