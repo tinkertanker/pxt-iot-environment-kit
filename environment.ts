@@ -19,6 +19,7 @@ namespace Environment {
     let dig_P7 = getInt16LE(0x9A)
     let dig_P8 = getInt16LE(0x9C)
     let dig_P9 = getInt16LE(0x9E)
+	
     let dig_H1 = getreg(0xA1)
     let dig_H2 = getInt16LE(0xE1)
     let dig_H3 = getreg(0xE3)
