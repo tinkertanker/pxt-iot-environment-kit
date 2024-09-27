@@ -858,7 +858,7 @@ namespace Environment {
         );
         return Math.round(UVlevel)
     }
-
+    let compensation_factor = 1.0
     /**
     * get PH level value (0~14)
     * @param pin describe parameter here, eg: AnalogPin.P1
@@ -870,7 +870,7 @@ namespace Environment {
             PHlevel += pins.analogReadPin(pin);
             basic.pause(10);
         }
-        PHlevel = PHlevel*1.0/10/1023 * 3.3 * (-5.7541) + 16.654
+        PHlevel = (PHlevel*1.0/10/1023 * 3.3 * (-5.7541) + 16.654)*compensation_factor
         if (PHlevel > 14) {
             PHlevel = 14.00
         }
@@ -880,6 +880,21 @@ namespace Environment {
         return Math.round(PHlevel * 100) / 100; 
     }
 
+    
+    /**
+    * alibration PH level value (0.0~10.00)
+    * @param pin describe parameter here, eg: AnalogPin.P1
+    */
+    //% blockId="calibrationPHLevel" block="PH sensor %Rjpin %alibration_value alibration value"
+    export function calibrationPHLevel(pin: AnalogPin, alibration_value: number): void {
+        let PHlevel = 0;
+        for(let i = 0; i < 10; i++){
+            PHlevel += pins.analogReadPin(pin);
+            basic.pause(10);
+        }
+        PHlevel = PHlevel*1.0/10/1023 * 3.3 * (-5.7541) + 16.654
+        compensation_factor = alibration_value / PHlevel
+    } 
         /**
     * toggle led
     */

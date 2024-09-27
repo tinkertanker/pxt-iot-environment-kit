@@ -23,6 +23,7 @@
   "Environment.ReadWindSpeed|block": "连接至 %windspeedpin 的风速值(m/s)",
   "Environment.UVLevel|block": "紫外线传感器 %Rjpin 强度(0~15)",
   "Environment.readPHLevel|block": "PH传感器 %Rjpin 强度(0~14)",
+  "Environment.calibrationPHLevel|block": "PH传感器校准 %Rjpin 引脚(0~14) %alibration_value 校准值",
   "Environment.ValType.DS18B20_temperature_C|block": "摄氏温度(℃)",
   "Environment.ValType.DS18B20_temperature_F|block": "华氏温度(℉)",
   "Environment.dht11value|block":  "DHT11传感器的 %dht11type|值 连接至 %dht11pin",
