@@ -563,8 +563,6 @@ namespace Environment {
         return pm25;
     }
 
-
-
     /**
      * get pm10 value (μg/m³) 
      * @param pm10pin describe parameter here, eg: DigitalPin.P13     
@@ -585,9 +583,6 @@ namespace Environment {
         return pm10;
     }
 
-
-
-
     /**
      * get soil moisture value (0~100)
      * @param soilmoisturepin describe parameter here, eg: AnalogPin.P1
@@ -606,7 +601,6 @@ namespace Environment {
         soilmoisture = voltage;
         return Math.round(soilmoisture)
     }
-
 
     /**
      * get light intensity value (0~100)
@@ -627,7 +621,6 @@ namespace Environment {
         return Math.round(lightintensity)
     }
 
-
     /**
      * get water level value (0~100)
      * @param waterlevelpin describe parameter here, eg: AnalogPin.P1
@@ -646,8 +639,6 @@ namespace Environment {
         waterlevel = voltage;
         return Math.round(waterlevel)
     }
-
-
 
     /**
      * get wind speed value (m/s)
@@ -668,8 +659,6 @@ namespace Environment {
         windspeed = voltage / 40;
         return Math.round(windspeed)
     }
-
-
 
     /** 
      * get noise value (dB)
@@ -810,6 +799,7 @@ namespace Environment {
         }
         return 0;
     }
+
     /**
     * TODO: Detect soil moisture value(0~100%)
     * @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
@@ -859,27 +849,29 @@ namespace Environment {
         return Math.round(UVlevel)
     }
     let compensation_factor = 1.0
+
     /**
     * get PH level value (0~14)
     * @param pin describe parameter here, eg: AnalogPin.P1
     */
     //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
     export function readPHLevel(pin: AnalogPin): number {
-        let PHlevel = 0;
+        let PHlevel = 0.0;
         for(let i = 0; i < 10; i++){
             PHlevel += pins.analogReadPin(pin);
-            basic.pause(10);
+            basic.pause(1);
         }
-        PHlevel = (PHlevel*1.0/10/1023 * 3.3 * (-5.7541) + 16.654)*compensation_factor
+        PHlevel = PHlevel / 10.0
+        PHlevel = 3.3 * (PHlevel/ 1023.0)
+        PHlevel = (PHlevel * (-5.7541) + 16.654) * compensation_factor
         if (PHlevel > 14) {
             PHlevel = 14.00
         }
         else if (PHlevel < 0) {
             PHlevel = 0.00
         }
-        return Math.round(PHlevel * 100) / 100; 
+        return Math.round(PHlevel * 100) / 100.0; 
     }
-
     
     /**
     * alibration PH level value (0.0~10.00)
@@ -890,12 +882,15 @@ namespace Environment {
         let PHlevel = 0;
         for(let i = 0; i < 10; i++){
             PHlevel += pins.analogReadPin(pin);
-            basic.pause(10);
+            basic.pause(1);
         }
-        PHlevel = PHlevel*1.0/10/1023 * 3.3 * (-5.7541) + 16.654
+        PHlevel = PHlevel / 10.0
+        PHlevel = 3.3 * (PHlevel / 1023.0)
+        PHlevel = PHlevel * (-5.7541) + 16.654
         compensation_factor = alibration_value / PHlevel
     } 
-        /**
+
+    /**
     * toggle led
     */
     //% blockId=LED block="LED %pin toggle to $ledstate || brightness %brightness \\%"
