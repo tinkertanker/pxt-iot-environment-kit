@@ -870,6 +870,7 @@ namespace Environment {
         else if (PHlevel < 0) {
             PHlevel = 0.00
         }
+        serial.writeNumber(PHlevel)
         return Math.round(PHlevel * 100) / 100.0; 
     }
     
