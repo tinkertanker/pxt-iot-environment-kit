@@ -371,8 +371,8 @@ namespace Environment {
     }
     /**
      * get dust value (μg/m³) 
-     * @param vLED describe parameter here, eg: DigitalPin.P16
-     * @param vo describe parameter here, eg: AnalogPin.P1
+     * @param vLED describe parameter here
+     * @param vo describe parameter here
      */
     //% blockId="readdust" block="value of dust(μg/m³) at LED %vLED| out %vo"
     export function ReadDust(vLED: DigitalPin, vo: AnalogPin): number {
@@ -401,8 +401,8 @@ namespace Environment {
 
     /**
      * get Ultrasonic(sonar:bit) distance
-     * @param distance_unit describe parameter here, eg: 1
-     * @param pin describe parameter here, eg: DigitalPin.P16
+     * @param distance_unit describe parameter here
+     * @param pin describe parameter here
      */
     //% blockId=readsonarbit block="Ultrasonic distance in unit %distance_unit |at|pin %pin"
     export function sonarbit_distance(distance_unit: Distance_Unit, pin: DigitalPin): number {
@@ -443,7 +443,7 @@ namespace Environment {
 
     /**
      * get dht11 temperature and humidity Value
-     * @param dht11pin describe parameter here, eg: DigitalPin.P15
+     * @param dht11pin describe parameter here
      */
     //% advanced=true
     //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
@@ -546,7 +546,7 @@ namespace Environment {
 
     /**
      * get pm2.5 value (μg/m³) 
-     * @param pm25pin describe parameter here, eg: DigitalPin.P14
+     * @param pm25pin describe parameter here
      */
     //% advanced=true
     //% blockId="readpm25" block="value of pm2.5(μg/m³) at pin %pm25pin"
@@ -565,7 +565,7 @@ namespace Environment {
 
     /**
      * get pm10 value (μg/m³) 
-     * @param pm10pin describe parameter here, eg: DigitalPin.P13     
+     * @param pm10pin describe parameter here    
      */
     //% advanced=true
     //% blockId="readpm10" block="value of pm10(μg/m³) at pin %pm10pin"
@@ -585,7 +585,7 @@ namespace Environment {
 
     /**
      * get soil moisture value (0~100)
-     * @param soilmoisturepin describe parameter here, eg: AnalogPin.P1
+     * @param soilmoisturepin describe parameter here
      */
     //% blockId="readsoilmoisture" block="value of soil moisture(0~100) at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilmoisturepin: AnalogPin): number {
@@ -604,7 +604,7 @@ namespace Environment {
 
     /**
      * get light intensity value (0~100)
-     * @param lightintensitypin describe parameter here, eg: AnalogPin.P1
+     * @param lightintensitypin describe parameter here
      */
     //% blockId="readlightintensity" block="value of light intensity(0~100) at pin %lightintensitypin"
     export function ReadLightIntensity(lightintensitypin: AnalogPin): number {
@@ -623,7 +623,7 @@ namespace Environment {
 
     /**
      * get water level value (0~100)
-     * @param waterlevelpin describe parameter here, eg: AnalogPin.P1
+     * @param waterlevelpin describe parameter here
      */
     //% blockId="readWaterLevel" block="value of water level(0~100) at pin %waterlevelpin"
     export function ReadWaterLevel(waterlevelpin: AnalogPin): number {
@@ -642,7 +642,7 @@ namespace Environment {
 
     /**
      * get wind speed value (m/s)
-     * @param windspeedpin describe parameter here, eg: AnalogPin.P1
+     * @param windspeedpin describe parameter here
      */
     //% advanced=true
     //% blockId="readwindspeed" block="value of wind speed(m/s) at pin %windspeedpin"
@@ -662,7 +662,7 @@ namespace Environment {
 
     /** 
      * get noise value (dB)
-     * @param noisepin describe parameter here, eg: AnalogPin.P1
+     * @param noisepin describe parameter here
      */
     //% blockId="readnoise" block="value of noise(dB) at pin %noisepin"
     export function ReadNoise(noisepin: AnalogPin): number {
@@ -802,7 +802,7 @@ namespace Environment {
 
     /**
     * TODO: Detect soil moisture value(0~100%)
-    * @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
+    * @param soilmoisturepin describe parameter here
     */
     //% blockId="PIR" block="PIR sensor %pin detects motion"
     export function PIR(pin: DigitalPin): boolean {
@@ -816,7 +816,7 @@ namespace Environment {
 
     /**
     * Return to the collision sensor status, on or off
-    * @param Rjpin describe parameter here, eg: DigitalRJPin.P1
+    * @param Rjpin describe parameter here
     */
     //% blockId=Crash block="Crash Sensor %Rjpin is pressed"
     export function Crash(pin: DigitalPin): boolean {
@@ -831,7 +831,7 @@ namespace Environment {
 
         /**
     * get UV level value (0~15)
-    * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
+    * @param waterlevelpin describe parameter here
     */
     //% blockId="readUVLevel" block="UV sensor %Rjpin level(0~15)"
     export function UVLevel(pin: AnalogPin): number {
@@ -852,7 +852,7 @@ namespace Environment {
 
     /**
     * get PH level value (0~14)
-    * @param pin describe parameter here, eg: AnalogPin.P1
+    * @param pin describe parameter here
     */
     //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
     export function readPHLevel(pin: AnalogPin): number {
@@ -876,7 +876,7 @@ namespace Environment {
     
     /**
     * alibration PH level value (0.0~10.00)
-    * @param pin describe parameter here, eg: AnalogPin.P1
+    * @param pin describe parameter here
     */
     //% blockId="calibrationPHLevel" block="PH sensor %Rjpin %alibration_value alibration value"
     export function calibrationPHLevel(pin: AnalogPin, alibration_value: number): void {
