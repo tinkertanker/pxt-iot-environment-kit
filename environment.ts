@@ -857,13 +857,15 @@ namespace Environment {
     //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
     export function readPHLevel(pin: AnalogPin): number {
         let PHlevel = 0.0;
-        for(let i = 0; i < 10; i++){
+        for(let i = 0; i < 100; i++){
             PHlevel += pins.analogReadPin(pin);
             basic.pause(1);
         }
-        PHlevel = PHlevel / 10.0
+        PHlevel = PHlevel / 100.0
         PHlevel = 3.3 * (PHlevel/ 1023.0)
         PHlevel = (PHlevel * (-5.7541) + 16.654) * compensation_factor
+        //直线斜率优化
+        PHlevel = PHlevel - ((6.86 - PHlevel) * (1/26.6))
         if (PHlevel > 14) {
             PHlevel = 14.00
         }
