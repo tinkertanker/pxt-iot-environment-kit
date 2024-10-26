@@ -77,8 +77,6 @@ namespace Environment {
     const digH6 = 0xE7
 
     let Reference_VOLTAGE = 3100
-    let PH_value_cnt = 0
-    let PH_value:number [] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     export enum DHT11Type {
         //% block="temperature(℃)" enumval=0
@@ -859,16 +857,15 @@ namespace Environment {
     //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
     export function readPHLevel(pin: AnalogPin): number {
         let PHlevel = 0.0;
-        if (PH_value_cnt >= 30) PH_value_cnt = 0;
-        PH_value[PH_value_cnt++] = pins.analogReadPin(pin)
-        for(let i = 0; i < 30; i++){
-            PHlevel +=  PH_value[i];
+        for(let i = 0; i < 100; i++){
+            PHlevel += pins.analogReadPin(pin);
+            basic.pause(1);
         }
-        PHlevel = PHlevel / 30.0
+        PHlevel = PHlevel / 100.0
         PHlevel = 3.3 * (PHlevel/ 1023.0)
         PHlevel = (PHlevel * (-5.7541) + 16.654) * compensation_factor
         //直线斜率优化
-        //PHlevel = PHlevel - ((6.86 - PHlevel) * (1/26.6))
+        PHlevel = PHlevel - ((6.86 - PHlevel) * (1/26.6))
         if (PHlevel > 14) {
             PHlevel = 14.00
         }
