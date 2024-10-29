@@ -19,7 +19,7 @@ namespace Environment {
     let dig_P7 = getInt16LE(0x9A)
     let dig_P8 = getInt16LE(0x9C)
     let dig_P9 = getInt16LE(0x9E)
-	
+
     let dig_H1 = getreg(0xA1)
     let dig_H2 = getInt16LE(0xE1)
     let dig_H3 = getreg(0xE3)
@@ -77,6 +77,8 @@ namespace Environment {
     const digH6 = 0xE7
 
     let Reference_VOLTAGE = 3100
+    let PHvalue: number[] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    let PHcnt = 0
 
     export enum DHT11Type {
         //% block="temperature(℃)" enumval=0
@@ -115,7 +117,7 @@ namespace Environment {
         //% block="altitude(M)" enumval=3
         BME280_altitude,
     }
-	
+
 
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
@@ -303,7 +305,7 @@ namespace Environment {
         //% block="temperature(℉)" enumval=1
         DS18B20_temperature_F
     }
-    function init_18b20(mpin:DigitalPin) {
+    function init_18b20(mpin: DigitalPin) {
         pins.digitalWritePin(mpin, 0)
         control.waitMicros(600)
         pins.digitalWritePin(mpin, 1)
@@ -312,7 +314,7 @@ namespace Environment {
         control.waitMicros(600)
         return ack
     }
-    function write_18b20 (mpin:DigitalPin,data: number) {
+    function write_18b20(mpin: DigitalPin, data: number) {
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
             pins.digitalWritePin(mpin, 0)
@@ -327,7 +329,7 @@ namespace Environment {
             data = data >> 1
         }
     }
-    function read_18b20 (mpin:DigitalPin) {
+    function read_18b20(mpin: DigitalPin) {
         dat = 0x00
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
@@ -342,19 +344,19 @@ namespace Environment {
         return dat
     }
     //% block="value of DS18B20 %state at pin %pin"
-    export function Ds18b20Temp(pin:DigitalPin,state:ValType):number{
+    export function Ds18b20Temp(pin: DigitalPin, state: ValType): number {
         init_18b20(pin)
-        write_18b20(pin,0xCC)
-        write_18b20(pin,0x44)
+        write_18b20(pin, 0xCC)
+        write_18b20(pin, 0x44)
         basic.pause(10)
         init_18b20(pin)
-        write_18b20(pin,0xCC)
-        write_18b20(pin,0xBE)
+        write_18b20(pin, 0xCC)
+        write_18b20(pin, 0xBE)
         low = read_18b20(pin)
         high = read_18b20(pin)
         temperature = high << 8 | low
         temperature = temperature / 16
-        if(temperature > 130){
+        if (temperature > 130) {
             temperature = lastTemp
         }
         lastTemp = temperature
@@ -829,10 +831,10 @@ namespace Environment {
         }
     }
 
-        /**
-    * get UV level value (0~15)
-    * @param waterlevelpin describe parameter here
-    */
+    /**
+* get UV level value (0~15)
+* @param waterlevelpin describe parameter here
+*/
     //% blockId="readUVLevel" block="UV sensor %Rjpin level(0~15)"
     export function UVLevel(pin: AnalogPin): number {
         let UVlevel = pins.analogReadPin(pin);
@@ -857,15 +859,17 @@ namespace Environment {
     //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
     export function readPHLevel(pin: AnalogPin): number {
         let PHlevel = 0.0;
-        for(let i = 0; i < 100; i++){
-            PHlevel += pins.analogReadPin(pin);
-            basic.pause(1);
+        PHvalue[PHcnt++] = pins.analogReadPin(pin);
+        if (PHcnt >= 20)
+            PHcnt = 0;
+        for (let i = 0; i < 20; i++) {
+            PHlevel += PHvalue[i]
         }
-        PHlevel = PHlevel / 100.0
-        PHlevel = 3.3 * (PHlevel/ 1023.0)
-        PHlevel = (PHlevel * (-5.7541) + 16.654) * compensation_factor
+        PHlevel = PHlevel / 20.0
+        PHlevel = 3.3 * (PHlevel / 1023.0)
+        PHlevel = (PHlevel * (-5.7541) + 16.654) * 0.997 * compensation_factor
         //直线斜率优化
-        PHlevel = PHlevel - ((6.86 - PHlevel) * (1/39.9))
+        PHlevel = PHlevel - ((6.86 - PHlevel) * (1 / 39.9))
         if (PHlevel > 14) {
             PHlevel = 14.00
         }
@@ -873,9 +877,9 @@ namespace Environment {
             PHlevel = 0.00
         }
         // serial.writeNumber(PHlevel)
-        return Math.round(PHlevel * 100) / 100.0; 
+        return Math.round(PHlevel * 100) / 100.0;
     }
-    
+
     /**
     * alibration PH level value (0.0~10.00)
     * @param pin describe parameter here
@@ -883,15 +887,14 @@ namespace Environment {
     //% blockId="calibrationPHLevel" block="PH sensor %Rjpin %alibration_value alibration value"
     export function calibrationPHLevel(pin: AnalogPin, alibration_value: number): void {
         let PHlevel = 0;
-        for(let i = 0; i < 10; i++){
-            PHlevel += pins.analogReadPin(pin);
-            basic.pause(1);
+        for (let i = 0; i < 20; i++) {
+            PHlevel += PHvalue[i]
         }
-        PHlevel = PHlevel / 10.0
-        PHlevel = 3.3 * (PHlevel / 1023.0)
+        PHlevel = PHlevel / 20.0
+        PHlevel = 3.3 * (PHlevel / 1024.0)
         PHlevel = PHlevel * (-5.7541) + 16.654
         compensation_factor = alibration_value / PHlevel
-    } 
+    }
 
     /**
     * toggle led
