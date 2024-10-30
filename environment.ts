@@ -877,7 +877,7 @@ namespace Environment {
             PHlevel = 0.00
         }
         // serial.writeNumber(PHlevel)
-        return Math.round(PHlevel * 100) / 100.0;
+        return Math.round(PHlevel * 10) / 10.0;
     }
 
     /**
@@ -892,7 +892,7 @@ namespace Environment {
         }
         PHlevel = PHlevel / 20.0
         PHlevel = 3.3 * (PHlevel / 1024.0)
-        PHlevel = PHlevel * (-5.7541) + 16.654
+        PHlevel = (PHlevel * (-5.7541) + 16.654) * 0.997
         compensation_factor = alibration_value / PHlevel
     }
 
