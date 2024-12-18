@@ -7,11 +7,7 @@
         "core": "*",
         "SSD1306_OLED": "github:tinkertanker/pxt-oled-ssd1306",
         "ds1307": "github:elecfreaks/pxt-ds1307-rtc#v1.0.1",
-<<<<<<< HEAD
-        "ESP8266_IoT": "github:ZY2516/pxt-esp8266iot"
-=======
         "ESP8266_IoT": "github:elecfreaks/pxt-esp8266iot#v2.1.12"
->>>>>>> 0b46e841a5306a3be0bbbe47b54385d9c29dfd01
     },
     "files": [
         "environment.ts",
