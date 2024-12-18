@@ -19,6 +19,7 @@ namespace Environment {
     let dig_P7 = getInt16LE(0x9A)
     let dig_P8 = getInt16LE(0x9C)
     let dig_P9 = getInt16LE(0x9E)
+
     let dig_H1 = getreg(0xA1)
     let dig_H2 = getInt16LE(0xE1)
     let dig_H3 = getreg(0xE3)
@@ -76,6 +77,8 @@ namespace Environment {
     const digH6 = 0xE7
 
     let Reference_VOLTAGE = 3100
+    let PHvalue: number[] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    let PHcnt = 0
 
     export enum DHT11Type {
         //% block="temperature(℃)" enumval=0
@@ -114,7 +117,7 @@ namespace Environment {
         //% block="altitude(M)" enumval=3
         BME280_altitude,
     }
-	
+
 
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
@@ -302,7 +305,7 @@ namespace Environment {
         //% block="temperature(℉)" enumval=1
         DS18B20_temperature_F
     }
-    function init_18b20(mpin:DigitalPin) {
+    function init_18b20(mpin: DigitalPin) {
         pins.digitalWritePin(mpin, 0)
         control.waitMicros(600)
         pins.digitalWritePin(mpin, 1)
@@ -311,7 +314,7 @@ namespace Environment {
         control.waitMicros(600)
         return ack
     }
-    function write_18b20 (mpin:DigitalPin,data: number) {
+    function write_18b20(mpin: DigitalPin, data: number) {
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
             pins.digitalWritePin(mpin, 0)
@@ -326,7 +329,7 @@ namespace Environment {
             data = data >> 1
         }
     }
-    function read_18b20 (mpin:DigitalPin) {
+    function read_18b20(mpin: DigitalPin) {
         dat = 0x00
         sc_byte = 0x01
         for (let index = 0; index < 8; index++) {
@@ -341,19 +344,19 @@ namespace Environment {
         return dat
     }
     //% block="value of DS18B20 %state at pin %pin"
-    export function Ds18b20Temp(pin:DigitalPin,state:ValType):number{
+    export function Ds18b20Temp(pin: DigitalPin, state: ValType): number {
         init_18b20(pin)
-        write_18b20(pin,0xCC)
-        write_18b20(pin,0x44)
+        write_18b20(pin, 0xCC)
+        write_18b20(pin, 0x44)
         basic.pause(10)
         init_18b20(pin)
-        write_18b20(pin,0xCC)
-        write_18b20(pin,0xBE)
+        write_18b20(pin, 0xCC)
+        write_18b20(pin, 0xBE)
         low = read_18b20(pin)
         high = read_18b20(pin)
         temperature = high << 8 | low
         temperature = temperature / 16
-        if(temperature > 130){
+        if (temperature > 130) {
             temperature = lastTemp
         }
         lastTemp = temperature
@@ -370,8 +373,8 @@ namespace Environment {
     }
     /**
      * get dust value (μg/m³) 
-     * @param vLED describe parameter here, eg: DigitalPin.P16
-     * @param vo describe parameter here, eg: AnalogPin.P1
+     * @param vLED describe parameter here
+     * @param vo describe parameter here
      */
     //% blockId="readdust" block="value of dust(μg/m³) at LED %vLED| out %vo"
     export function ReadDust(vLED: DigitalPin, vo: AnalogPin): number {
@@ -400,8 +403,8 @@ namespace Environment {
 
     /**
      * get Ultrasonic(sonar:bit) distance
-     * @param distance_unit describe parameter here, eg: 1
-     * @param pin describe parameter here, eg: DigitalPin.P16
+     * @param distance_unit describe parameter here
+     * @param pin describe parameter here
      */
     //% blockId=readsonarbit block="Ultrasonic distance in unit %distance_unit |at|pin %pin"
     export function sonarbit_distance(distance_unit: Distance_Unit, pin: DigitalPin): number {
@@ -416,7 +419,8 @@ namespace Environment {
 
         // read pulse
         let d = pins.pulseIn(pin, PulseValue.High, 23000)  // 8 / 340 = 
-        let distance = d * 10 * 5 / 3 / 58
+        // let distance = d * 10 * 5 / 3 / 58
+        let distance = d * 10 / 58
 
         if (distance > 4000) distance = 0
 
@@ -441,7 +445,7 @@ namespace Environment {
 
     /**
      * get dht11 temperature and humidity Value
-     * @param dht11pin describe parameter here, eg: DigitalPin.P15
+     * @param dht11pin describe parameter here
      */
     //% advanced=true
     //% blockId="readdht11" block="value of dht11 %dht11type| at pin %dht11pin"
@@ -544,7 +548,7 @@ namespace Environment {
 
     /**
      * get pm2.5 value (μg/m³) 
-     * @param pm25pin describe parameter here, eg: DigitalPin.P14
+     * @param pm25pin describe parameter here
      */
     //% advanced=true
     //% blockId="readpm25" block="value of pm2.5(μg/m³) at pin %pm25pin"
@@ -561,11 +565,9 @@ namespace Environment {
         return pm25;
     }
 
-
-
     /**
      * get pm10 value (μg/m³) 
-     * @param pm10pin describe parameter here, eg: DigitalPin.P13     
+     * @param pm10pin describe parameter here    
      */
     //% advanced=true
     //% blockId="readpm10" block="value of pm10(μg/m³) at pin %pm10pin"
@@ -583,12 +585,9 @@ namespace Environment {
         return pm10;
     }
 
-
-
-
     /**
      * get soil moisture value (0~100)
-     * @param soilmoisturepin describe parameter here, eg: AnalogPin.P1
+     * @param soilmoisturepin describe parameter here
      */
     //% blockId="readsoilmoisture" block="value of soil moisture(0~100) at pin %soilhumiditypin"
     export function ReadSoilHumidity(soilmoisturepin: AnalogPin): number {
@@ -605,10 +604,9 @@ namespace Environment {
         return Math.round(soilmoisture)
     }
 
-
     /**
      * get light intensity value (0~100)
-     * @param lightintensitypin describe parameter here, eg: AnalogPin.P1
+     * @param lightintensitypin describe parameter here
      */
     //% blockId="readlightintensity" block="value of light intensity(0~100) at pin %lightintensitypin"
     export function ReadLightIntensity(lightintensitypin: AnalogPin): number {
@@ -625,10 +623,9 @@ namespace Environment {
         return Math.round(lightintensity)
     }
 
-
     /**
      * get water level value (0~100)
-     * @param waterlevelpin describe parameter here, eg: AnalogPin.P1
+     * @param waterlevelpin describe parameter here
      */
     //% blockId="readWaterLevel" block="value of water level(0~100) at pin %waterlevelpin"
     export function ReadWaterLevel(waterlevelpin: AnalogPin): number {
@@ -645,11 +642,9 @@ namespace Environment {
         return Math.round(waterlevel)
     }
 
-
-
     /**
      * get wind speed value (m/s)
-     * @param windspeedpin describe parameter here, eg: AnalogPin.P1
+     * @param windspeedpin describe parameter here
      */
     //% advanced=true
     //% blockId="readwindspeed" block="value of wind speed(m/s) at pin %windspeedpin"
@@ -667,11 +662,9 @@ namespace Environment {
         return Math.round(windspeed)
     }
 
-
-
     /** 
      * get noise value (dB)
-     * @param noisepin describe parameter here, eg: AnalogPin.P1
+     * @param noisepin describe parameter here
      */
     //% blockId="readnoise" block="value of noise(dB) at pin %noisepin"
     export function ReadNoise(noisepin: AnalogPin): number {
@@ -808,9 +801,10 @@ namespace Environment {
         }
         return 0;
     }
+
     /**
     * TODO: Detect soil moisture value(0~100%)
-    * @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
+    * @param soilmoisturepin describe parameter here
     */
     //% blockId="PIR" block="PIR sensor %pin detects motion"
     export function PIR(pin: DigitalPin): boolean {
@@ -824,7 +818,7 @@ namespace Environment {
 
     /**
     * Return to the collision sensor status, on or off
-    * @param Rjpin describe parameter here, eg: DigitalRJPin.P1
+    * @param Rjpin describe parameter here
     */
     //% blockId=Crash block="Crash Sensor %Rjpin is pressed"
     export function Crash(pin: DigitalPin): boolean {
@@ -837,10 +831,10 @@ namespace Environment {
         }
     }
 
-        /**
-    * get UV level value (0~15)
-    * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
-    */
+    /**
+* get UV level value (0~15)
+* @param waterlevelpin describe parameter here
+*/
     //% blockId="readUVLevel" block="UV sensor %Rjpin level(0~15)"
     export function UVLevel(pin: AnalogPin): number {
         let UVlevel = pins.analogReadPin(pin);
@@ -856,7 +850,53 @@ namespace Environment {
         );
         return Math.round(UVlevel)
     }
-        /**
+    let compensation_factor = 1.0
+
+    /**
+    * get PH level value (0~14)
+    * @param pin describe parameter here
+    */
+    //% blockId="readPHLevel" block="PH sensor %Rjpin level(0~14)"
+    export function readPHLevel(pin: AnalogPin): number {
+        let PHlevel = 0.0;
+        PHvalue[PHcnt++] = pins.analogReadPin(pin);
+        if (PHcnt >= 20)
+            PHcnt = 0;
+        for (let i = 0; i < 20; i++) {
+            PHlevel += PHvalue[i]
+        }
+        PHlevel = PHlevel / 20.0
+        PHlevel = 3.3 * (PHlevel / 1023.0)
+        PHlevel = (PHlevel * (-5.7541) + 16.654) * 0.997 * compensation_factor
+        //直线斜率优化
+        PHlevel = PHlevel - ((6.86 - PHlevel) * (1 / 39.9))
+        if (PHlevel > 14) {
+            PHlevel = 14.00
+        }
+        else if (PHlevel < 0) {
+            PHlevel = 0.00
+        }
+        // serial.writeNumber(PHlevel)
+        return Math.round(PHlevel * 10) / 10.0;
+    }
+
+    /**
+    * alibration PH level value (0.0~10.00)
+    * @param pin describe parameter here
+    */
+    //% blockId="calibrationPHLevel" block="PH sensor %Rjpin %alibration_value alibration value"
+    export function calibrationPHLevel(pin: AnalogPin, alibration_value: number): void {
+        let PHlevel = 0;
+        for (let i = 0; i < 20; i++) {
+            PHlevel += PHvalue[i]
+        }
+        PHlevel = PHlevel / 20.0
+        PHlevel = 3.3 * (PHlevel / 1024.0)
+        PHlevel = (PHlevel * (-5.7541) + 16.654) * 0.997
+        compensation_factor = alibration_value / PHlevel
+    }
+
+    /**
     * toggle led
     */
     //% blockId=LED block="LED %pin toggle to $ledstate || brightness %brightness \\%"
