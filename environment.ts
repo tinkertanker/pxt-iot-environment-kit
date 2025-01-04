@@ -1,7 +1,7 @@
 /**
  * Custom blocks
  */
-//% color=#ff7a4b icon="\uf0ee" block="Octopus"
+//% color=#ff7a4b icon="\uf2db" block="Octopus"
 namespace Environment {
 
     let weatherMonitorStarted = false;
