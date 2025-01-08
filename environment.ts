@@ -995,6 +995,9 @@ namespace Environment {
         return true;
     }
 
+    let ina219_voltage = 0;
+    let ina219_current = 0;
+
     function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
         // 初始化引脚为输出模式
         pins.setPull(pin, PinPullMode.PullNone);
@@ -1046,11 +1049,14 @@ namespace Environment {
         let bit = 0;
 
         pins.setPull(pin, PinPullMode.PullUp);
+        let overtimr = input.runningTime() + 2; // 记录当前时间
+
         // 等待从机传输数据，拉低总线100us
-        while (pins.digitalReadPin(pin) === 1) {
+        while (pins.digitalReadPin(pin) === 1 && input.runningTime() < overtimr) {
         }
+        overtimr = input.runningTime() + 2; // 记录当前时间
         // 等待从机传输数据，拉高总线
-        while (pins.digitalReadPin(pin) === 0) {
+        while (pins.digitalReadPin(pin) === 0 && input.runningTime() < overtimr) {
         }
 
         control.waitMicros(150); // 等待至少150us以读取比特位
@@ -1082,11 +1088,13 @@ namespace Environment {
             return -2; // 数据校验失败，返回错误代码
         }
 
+        ina219_voltage = data[0] << 8 | data[1]; // 更新电压值
+        ina219_current = data[2] << 8 | data[3]; // 更新电流值
         switch (value) {
             case INA219_state.INA219_voltage:
-                return data[0] << 8 | data[1]; // 返回电压值
+                return ina219_voltage; // 返回电压值
             case INA219_state.INA219_current:
-                return data[2] << 8 | data[3]; // 返回电流值
+                return ina219_current; // 返回电流值
         }
     }
 }
