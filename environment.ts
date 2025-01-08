@@ -1081,6 +1081,17 @@ namespace Environment {
         if (data[4] != ((data[0] + data[1] + data[2] + data[3] )&0xff)) {
             return -2; // 数据校验失败，返回错误代码
         }
+        serial.writeLine("data[0]:")
+        serial.writeNumber(data[0])
+        serial.writeLine("\ndata[1]:")
+        serial.writeNumber(data[1])
+        serial.writeLine("\ndata[2]:")
+        serial.writeNumber(data[2])
+        serial.writeLine("\ndata[3]:")
+        serial.writeNumber(data[3])
+        serial.writeLine("\ndata[4]:")
+        serial.writeNumber(data[4])
+
         switch (value) {
             case INA219_state.INA219_voltage:
                 return data[0] << 8 | data[1]; // 返回电压值
