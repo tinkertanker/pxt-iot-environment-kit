@@ -1009,15 +1009,15 @@ namespace Environment {
 
         // 切换到输入模式以检测从机应答
         pins.setPull(pin, PinPullMode.PullUp);
-
+        basic.pause(50); // 等待50ms
         // 检测从机是否拉低总线作为应答
         if (pins.digitalReadPin(pin) === 0) {
-            basic.pause(80); // 等待80ms
+            basic.pause(30); // 等待80ms
             // 确认从机拉低总线
             if (pins.digitalReadPin(pin) === 0) {
+                basic.pause(30); // 等待100ms
                 if (pins.digitalReadPin(pin) === 1) { // 检查从机是否释放总线
                     // 确认从机释放总线
-                    control.waitMicros(80); // 等待从机释放的时间
                     return true;
                 }
                 else {
