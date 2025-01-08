@@ -995,8 +995,7 @@ namespace Environment {
         return true;
     }
 
-    // 辅助函数：发送起始信号并等待应答
-    function send_start_signal_and_wait_response(pin: DigitalPin): boolean {
+    function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
         // 初始化引脚为输出模式
         pins.setPull(pin, PinPullMode.PullNone);
         pins.digitalWritePin(pin, 1); // 设置高电平
@@ -1018,32 +1017,32 @@ namespace Environment {
                 basic.pause(40); // 等待100ms
                 if (pins.digitalReadPin(pin) === 1) { // 检查从机是否释放总线
                     // 确认从机释放总线
-                    return true;
+                    return 0;
                 }
                 else {
-                    return false; // 从机未释放总线
+                    return 3; // 从机未释放总线
                 }
             }
             else {
-                return false; // 从机未拉低总线作为应答
+                return 2; // 从机未拉低总线作为应答
             }
         }
-        return false; // 如果没有正确接收到应答，则返回错误
+        return 1; // 如果没有正确接收到应答，则返回错误
     }
 
     // 辅助函数：读取一个字节
-    function read_byte(pin: DigitalPin): number {
+    function ina219_read_byte(pin: DigitalPin): number {
         let byte = 0;
 
         for (let i = 1; i <= 8; i++) {
-            byte |= read_bit(pin) << 8 - i;
+            byte |= ina219_read_bit(pin) << 8 - i;
         }
 
         return byte;
     }
 
     // 辅助函数：读取一个比特位
-    function read_bit(pin: DigitalPin): number {
+    function ina219_read_bit(pin: DigitalPin): number {
         let bit = 0;
 
         pins.setPull(pin, PinPullMode.PullUp);
@@ -1068,29 +1067,20 @@ namespace Environment {
         let data = [0, 0, 0, 0, 0];
 
         // 发送起始信号并等待应答
-        if (!send_start_signal_and_wait_response(ina219pin)) {
-            return -1; // 如果没有正确接收到应答，则返回错误代码
+        let result = ina219_send_start_signal_and_wait_response(ina219pin);
+        if (result !== 0) {
+            return result; // 如果没有正确接收到应答，则返回错误代码
         }
 
         // 读取数据
         for (let i = 0; i < 5; i++) {
-            data[i] = read_byte(ina219pin);
+            data[i] = ina219_read_byte(ina219pin);
         }
 
         // 校验数据完整性
         if (data[4] != ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
             return -2; // 数据校验失败，返回错误代码
         }
-        serial.writeLine("data[0]:")
-        serial.writeNumber(data[0])
-        serial.writeLine("\ndata[1]:")
-        serial.writeNumber(data[1])
-        serial.writeLine("\ndata[2]:")
-        serial.writeNumber(data[2])
-        serial.writeLine("\ndata[3]:")
-        serial.writeNumber(data[3])
-        serial.writeLine("\ndata[4]:")
-        serial.writeNumber(data[4])
 
         switch (value) {
             case INA219_state.INA219_voltage:
