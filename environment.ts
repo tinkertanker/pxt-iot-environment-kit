@@ -1049,12 +1049,12 @@ namespace Environment {
         let bit = 0;
 
         pins.setPull(pin, PinPullMode.PullUp);
-        let overtimr = input.runningTime() + 100; // 记录当前时间
+        let overtimr = input.runningTime() + 300; // 记录当前时间
 
         // 等待从机传输数据，拉低总线100us
         while (pins.digitalReadPin(pin) === 1 && input.runningTime() < overtimr) {
         }
-        overtimr = input.runningTime() + 100; // 记录当前时间
+        overtimr = input.runningTime() + 300; // 记录当前时间
         // 等待从机传输数据，拉高总线
         while (pins.digitalReadPin(pin) === 0 && input.runningTime() < overtimr) {
         }
