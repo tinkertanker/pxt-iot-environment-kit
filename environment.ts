@@ -1076,7 +1076,7 @@ namespace Environment {
         // 发送起始信号并等待应答
         let result = ina219_send_start_signal_and_wait_response(ina219pin);
         if (result !== 0) {
-            return result; // 如果没有正确接收到应答，则返回错误代码
+            return 0; // 如果没有正确接收到应答，则返回错误代码
         }
 
         // 读取数据
@@ -1086,7 +1086,12 @@ namespace Environment {
 
         // 校验数据完整性
         if (data[4] != ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
-            return -2; // 数据校验失败，返回错误代码
+            switch (value) {
+                case INA219_state.INA219_voltage:
+                    return ina219_voltage; // 返回电压值
+                case INA219_state.INA219_current:
+                    return ina219_current; // 返回电流值
+            }
         }
 
         ina219_voltage = data[0] << 8 | data[1]; // 更新电压值
