@@ -1049,14 +1049,15 @@ namespace Environment {
         let bit = 0;
 
         pins.setPull(pin, PinPullMode.PullUp);
-        let overtimr = input.runningTime() + 300; // 记录当前时间
+        let overtimr = 0; // 记录当前时间
+
 
         // 等待从机传输数据，拉低总线100us
-        while (pins.digitalReadPin(pin) === 1 && input.runningTime() < overtimr) {
+        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 10000) {
         }
-        overtimr = input.runningTime() + 300; // 记录当前时间
+        overtimr = 0;
         // 等待从机传输数据，拉高总线
-        while (pins.digitalReadPin(pin) === 0 && input.runningTime() < overtimr) {
+        while (pins.digitalReadPin(pin) === 0 && overtimr++ < 10000) {
         }
 
         control.waitMicros(150); // 等待至少150us以读取比特位
