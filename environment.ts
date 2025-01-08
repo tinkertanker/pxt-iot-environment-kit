@@ -118,6 +118,13 @@ namespace Environment {
         BME280_altitude,
     }
 
+    export enum INA219_state {
+        //% block="voltage(V)" enumval=0
+        INA219_voltage,
+
+        //% block="current(A)" enumval=1
+        INA219_current,
+    }
 
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
@@ -988,6 +995,98 @@ namespace Environment {
         return true;
     }
 
+    // 辅助函数：发送起始信号并等待应答
+    function send_start_signal_and_wait_response(pin: DigitalPin): boolean {
+        // 初始化引脚为输出模式
+        pins.setPull(pin, PinPullMode.PullNone);
+        pins.digitalWritePin(pin, 1); // 设置高电平
 
+        // 发送起始信号：主机拉低100ms
+        pins.digitalWritePin(pin, 0); // 拉低总线
+        basic.pause(100); // 等待100ms
+        pins.digitalWritePin(pin, 1); // 放开总线
+        basic.pause(1); // 等待100ms
+
+        // 切换到输入模式以检测从机应答
+        pins.setPull(pin, PinPullMode.PullUp);
+
+        // 检测从机是否拉低总线作为应答
+        if (pins.digitalReadPin(pin) === 0) {
+            basic.pause(80); // 等待80ms
+            // 确认从机拉低总线
+            if (pins.digitalReadPin(pin) === 0) {
+                if (pins.digitalReadPin(pin) === 1) { // 检查从机是否释放总线
+                    // 确认从机释放总线
+                    control.waitMicros(80); // 等待从机释放的时间
+                    return true;
+                }
+                else {
+                    return false; // 从机未释放总线
+                }
+            }
+            else {
+                return false; // 从机未拉低总线作为应答
+            }
+        }
+        return false; // 如果没有正确接收到应答，则返回错误
+    }
+
+    // 辅助函数：读取一个字节
+    function read_byte(pin: DigitalPin): number {
+        let byte = 0;
+
+        for (let i = 0; i < 8; i++) {
+            byte |= read_bit(pin) << i;
+        }
+
+        return byte;
+    }
+
+    // 辅助函数：读取一个比特位
+    function read_bit(pin: DigitalPin): number {
+        let bit = 0;
+        
+        pins.setPull(pin, PinPullMode.PullUp);
+        // 等待从机传输数据，拉低总线100us
+        while(pins.digitalReadPin(pin) === 1) {
+        }  
+        // 等待从机传输数据，拉高总线
+        while(pins.digitalReadPin(pin) === 0) {
+        }
+
+        control.waitMicros(150); // 等待至少150us以读取比特位
+
+        // 读取比特位
+        bit = pins.digitalReadPin(pin);
+
+        return bit;
+    }
+
+    //% block="INA219 sensor on %ina219pin read %value"
+    export function INA219_read_value(ina219pin: DigitalPin,value: INA219_state): number {
+        // 数据缓冲区，假设主控发送的是4个字节的数据
+        let data = [0, 0, 0, 0, 0];
+
+        // 发送起始信号并等待应答
+        if (!send_start_signal_and_wait_response(ina219pin)) {
+            return -1; // 如果没有正确接收到应答，则返回错误代码
+        }
+
+        // 读取数据
+        for (let i = 0; i < 5; i++) {
+            data[i] = read_byte(ina219pin);
+        }
+
+        // 校验数据完整性
+        if (data[4] != ((data[0] + data[1] + data[2] + data[3] )&0xff)) {
+            return -1; // 数据校验失败，返回错误代码
+        }
+        switch (value) {
+            case INA219_state.INA219_voltage:
+                return data[0] << 8 | data[1]; // 返回电压值
+            case INA219_state.INA219_current:
+                return data[2] << 8 | data[3]; // 返回电流值
+        }
+    }
 }
 
