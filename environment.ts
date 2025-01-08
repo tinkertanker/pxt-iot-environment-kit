@@ -1079,7 +1079,7 @@ namespace Environment {
 
         // 校验数据完整性
         if (data[4] != ((data[0] + data[1] + data[2] + data[3] )&0xff)) {
-            return -1; // 数据校验失败，返回错误代码
+            return -2; // 数据校验失败，返回错误代码
         }
         switch (value) {
             case INA219_state.INA219_voltage:
