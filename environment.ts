@@ -1015,7 +1015,7 @@ namespace Environment {
             basic.pause(30); // 等待80ms
             // 确认从机拉低总线
             if (pins.digitalReadPin(pin) === 0) {
-                basic.pause(30); // 等待100ms
+                basic.pause(40); // 等待100ms
                 if (pins.digitalReadPin(pin) === 1) { // 检查从机是否释放总线
                     // 确认从机释放总线
                     return true;
