@@ -995,8 +995,8 @@ namespace Environment {
         return true;
     }
 
-    let ina219_voltage = 0;
-    let ina219_current = 0;
+    let ina219_voltage = 0.0;
+    let ina219_current = 0.0;
 
     function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
         // 初始化引脚为输出模式
@@ -1096,6 +1096,10 @@ namespace Environment {
 
         ina219_voltage = data[0] << 8 | data[1]; // 更新电压值
         ina219_current = data[2] << 8 | data[3]; // 更新电流值
+        // 转换为V和A
+        ina219_voltage /= 1000.0; // 将电压值除以10，转换为V
+        ina219_current /= 1000.0; // 将电流值除以100，转换为A
+
         switch (value) {
             case INA219_state.INA219_voltage:
                 return ina219_voltage; // 返回电压值
