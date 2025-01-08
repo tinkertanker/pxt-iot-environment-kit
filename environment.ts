@@ -1036,7 +1036,7 @@ namespace Environment {
         let byte = 0;
 
         for (let i = 0; i < 8; i++) {
-            byte |= read_bit(pin) << i;
+            byte |= read_bit(pin) << 8 - i;
         }
 
         return byte;
@@ -1045,13 +1045,13 @@ namespace Environment {
     // 辅助函数：读取一个比特位
     function read_bit(pin: DigitalPin): number {
         let bit = 0;
-        
+
         pins.setPull(pin, PinPullMode.PullUp);
         // 等待从机传输数据，拉低总线100us
-        while(pins.digitalReadPin(pin) === 1) {
-        }  
+        while (pins.digitalReadPin(pin) === 1) {
+        }
         // 等待从机传输数据，拉高总线
-        while(pins.digitalReadPin(pin) === 0) {
+        while (pins.digitalReadPin(pin) === 0) {
         }
 
         control.waitMicros(150); // 等待至少150us以读取比特位
@@ -1063,7 +1063,7 @@ namespace Environment {
     }
 
     //% block="INA219 sensor on %ina219pin read %value"
-    export function INA219_read_value(ina219pin: DigitalPin,value: INA219_state): number {
+    export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
         // 数据缓冲区，假设主控发送的是4个字节的数据
         let data = [0, 0, 0, 0, 0];
 
@@ -1078,7 +1078,7 @@ namespace Environment {
         }
 
         // 校验数据完整性
-        if (data[4] != ((data[0] + data[1] + data[2] + data[3] )&0xff)) {
+        if (data[4] != ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
             return -2; // 数据校验失败，返回错误代码
         }
         serial.writeLine("data[0]:")
