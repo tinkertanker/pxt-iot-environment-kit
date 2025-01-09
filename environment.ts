@@ -1011,7 +1011,7 @@ namespace Environment {
 
         // 切换到输入模式以检测从机应答
         pins.setPull(pin, PinPullMode.PullUp);
-        basic.pause(5); // 等待50ms
+        basic.pause(10); // 等待50ms
         // 检测从机是否拉低总线作为应答
         if (pins.digitalReadPin(pin) === 0) {
             basic.pause(3); // 等待80ms
@@ -1076,7 +1076,12 @@ namespace Environment {
         // 发送起始信号并等待应答
         let result = ina219_send_start_signal_and_wait_response(ina219pin);
         if (result !== 0) {
-            return result; // 如果没有正确接收到应答，则返回错误代码
+            switch (value) {
+                case INA219_state.INA219_voltage:
+                    return ina219_voltage; // 返回电压值
+                case INA219_state.INA219_current:
+                    return ina219_current; // 返回电流值
+            }
         }
 
         // 读取数据
