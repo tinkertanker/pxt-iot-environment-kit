@@ -1012,7 +1012,7 @@ namespace Environment {
 
         // 切换到输入模式以检测从机应答
         pins.setPull(pin, PinPullMode.PullUp);
-        while (pins.digitalReadPin(pin) === 0 && overtimr++ < 65536) {
+        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 20000) {
         }
         // 检测从机是否拉低总线作为应答
         if (pins.digitalReadPin(pin) === 0) {
