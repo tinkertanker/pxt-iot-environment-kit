@@ -1079,7 +1079,7 @@ namespace Environment {
         // 发送起始信号并等待应答
         let result = ina219_send_start_signal_and_wait_response(ina219pin);
         if (result !== 0) {
-            return result; // 没有接收到正确的应答，返回错误码
+            // return result; // 没有接收到正确的应答，返回错误码
 
             switch (value) {
                 case INA219_state.INA219_voltage:
