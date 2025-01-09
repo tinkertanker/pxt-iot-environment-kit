@@ -999,6 +999,7 @@ namespace Environment {
     let ina219_current = 0.0;
 
     function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
+        let overtimr = 0; // 记录当前时间
         // 初始化引脚为输出模式
         pins.setPull(pin, PinPullMode.PullNone);
         pins.digitalWritePin(pin, 1); // 设置高电平
@@ -1011,10 +1012,11 @@ namespace Environment {
 
         // 切换到输入模式以检测从机应答
         pins.setPull(pin, PinPullMode.PullUp);
-        basic.pause(10); // 等待50ms
+        while (pins.digitalReadPin(pin) === 0 && overtimr++ < 20000) {
+        }
         // 检测从机是否拉低总线作为应答
         if (pins.digitalReadPin(pin) === 0) {
-            basic.pause(3); // 等待80ms
+            basic.pause(5); // 等待80ms
             // 确认从机拉低总线
             if (pins.digitalReadPin(pin) === 0) {
                 basic.pause(7); // 等待100ms
