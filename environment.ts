@@ -1003,21 +1003,21 @@ namespace Environment {
         pins.setPull(pin, PinPullMode.PullNone);
         pins.digitalWritePin(pin, 1); // 设置高电平
 
-        // 发送起始信号：主机拉低100ms
+        // 发送起始信号：主机拉低10ms，拉高10ms
         pins.digitalWritePin(pin, 0); // 拉低总线
-        basic.pause(100); // 等待100ms
-        pins.digitalWritePin(pin, 1); // 放开总线
-        basic.pause(1); // 等待100ms
+        basic.pause(10); // 等待10ms
+        pins.digitalWritePin(pin, 1); // 拉高总线
+        basic.pause(10); // 等待10ms
 
         // 切换到输入模式以检测从机应答
         pins.setPull(pin, PinPullMode.PullUp);
-        basic.pause(50); // 等待50ms
+        basic.pause(3); // 等待50ms
         // 检测从机是否拉低总线作为应答
         if (pins.digitalReadPin(pin) === 0) {
-            basic.pause(30); // 等待80ms
+            basic.pause(3); // 等待80ms
             // 确认从机拉低总线
             if (pins.digitalReadPin(pin) === 0) {
-                basic.pause(40); // 等待100ms
+                basic.pause(7); // 等待100ms
                 if (pins.digitalReadPin(pin) === 1) { // 检查从机是否释放总线
                     // 确认从机释放总线
                     return 0;
