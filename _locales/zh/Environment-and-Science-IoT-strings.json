@@ -13,6 +13,7 @@
   "Environment.Distance_Unit_List.Distance_Unit_inch|block": "英尺",
   "Environment.INA219_state.INA219_voltage|block": "电压(V)",
   "Environment.INA219_state.INA219_current|block": "电流(A)",
+  "Environment.INA219_state.INA219_power|block": "功率(W)",
   "Environment.Ds18b20Temp|block": "DS18B20 温度传感器 %state 连接至 %pin",
   "Environment.PIR|block": "人体红外传感器 %Rjpin 监测到移动",
   "Environment.ReadDust|block": "连接至 LED %vLED| out %vo 的灰尘量(μg/m³)",
