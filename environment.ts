@@ -124,6 +124,9 @@ namespace Environment {
 
         //% block="current(A)" enumval=1
         INA219_current,
+
+        //% block="power(W)" enumval=2
+        INA219_power,
     }
 
     function setreg(reg: number, dat: number): void {
@@ -999,43 +1002,37 @@ namespace Environment {
     let ina219_current = 0.0;
 
     function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
-        let overtimr = 0; // 记录当前时间
-        // 初始化引脚为输出模式
+        let overtimr = 0; 
+
         pins.setPull(pin, PinPullMode.PullNone);
-        pins.digitalWritePin(pin, 1); // 设置高电平
+        pins.digitalWritePin(pin, 1);
 
-        // 发送起始信号：主机拉低10ms，拉高10ms
-        pins.digitalWritePin(pin, 0); // 拉低总线
-        basic.pause(10); // 等待10ms
-        pins.digitalWritePin(pin, 1); // 拉高总线
-        basic.pause(10); // 等待10ms
+        pins.digitalWritePin(pin, 0);
+        basic.pause(10);
+        pins.digitalWritePin(pin, 1);
+        basic.pause(10);
 
-        // 切换到输入模式以检测从机应答
         pins.setPull(pin, PinPullMode.PullUp);
         while (pins.digitalReadPin(pin) === 1 && overtimr++ < 20000) {
         }
-        // 检测从机是否拉低总线作为应答
         if (pins.digitalReadPin(pin) === 0) {
-            basic.pause(5); // 等待80ms
-            // 确认从机拉低总线
+            basic.pause(5); 
             if (pins.digitalReadPin(pin) === 0) {
-                basic.pause(7); // 等待100ms
-                if (pins.digitalReadPin(pin) === 1) { // 检查从机是否释放总线
-                    // 确认从机释放总线
+                basic.pause(7); 
+                if (pins.digitalReadPin(pin) === 1) { 
                     return 0;
                 }
                 else {
-                    return 3; // 从机未释放总线
+                    return 3;
                 }
             }
             else {
-                return 2; // 从机未拉低总线作为应答
+                return 2;
             }
         }
-        return 1; // 如果没有正确接收到应答，则返回错误
+        return 1;
     }
 
-    // 辅助函数：读取一个字节
     function ina219_read_byte(pin: DigitalPin): number {
         let byte = 0;
 
@@ -1046,25 +1043,21 @@ namespace Environment {
         return byte;
     }
 
-    // 辅助函数：读取一个比特位
     function ina219_read_bit(pin: DigitalPin): number {
         let bit = 0;
 
         pins.setPull(pin, PinPullMode.PullUp);
-        let overtimr = 0; // 记录当前时间
+        let overtimr = 0;
 
 
-        // 等待从机传输数据，拉低总线100us
         while (pins.digitalReadPin(pin) === 1 && overtimr++ < 10000) {
         }
         overtimr = 0;
-        // 等待从机传输数据，拉高总线
         while (pins.digitalReadPin(pin) === 0 && overtimr++ < 10000) {
         }
 
-        control.waitMicros(150); // 等待至少150us以读取比特位
+        control.waitMicros(150);
 
-        // 读取比特位
         bit = pins.digitalReadPin(pin);
 
         return bit;
@@ -1072,49 +1065,48 @@ namespace Environment {
 
     //% block="INA219 sensor on %ina219pin read %value"
     export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
-        basic.pause(50); // 等待10ms
-        // 数据缓冲区，假设主控发送的是4个字节的数据
+        basic.pause(50);
         let data = [0, 0, 0, 0, 0];
 
-        // 发送起始信号并等待应答
         let result = ina219_send_start_signal_and_wait_response(ina219pin);
         if (result !== 0) {
-            // return result; // 没有接收到正确的应答，返回错误码
-
             switch (value) {
                 case INA219_state.INA219_voltage:
-                    return ina219_voltage; // 返回电压值
+                    return ina219_voltage;
                 case INA219_state.INA219_current:
-                    return ina219_current; // 返回电流值
+                    return ina219_current;
+                case INA219_state.INA219_power:
+                    return ina219_voltage * ina219_current;
             }
         }
 
-        // 读取数据
         for (let i = 0; i < 5; i++) {
             data[i] = ina219_read_byte(ina219pin);
         }
 
-        // 校验数据完整性
         if (data[4] != ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
             switch (value) {
                 case INA219_state.INA219_voltage:
-                    return ina219_voltage; // 返回电压值
+                    return ina219_voltage;
                 case INA219_state.INA219_current:
-                    return ina219_current; // 返回电流值
+                    return ina219_current;
+                case INA219_state.INA219_power:
+                    return ina219_voltage * ina219_current;
             }
         }
 
-        ina219_voltage = data[0] << 8 | data[1]; // 更新电压值
-        ina219_current = data[2] << 8 | data[3]; // 更新电流值
-        // 转换为V和A
-        ina219_voltage /= 1000.0; // 将电压值除以10，转换为V
-        ina219_current /= 1000.0; // 将电流值除以100，转换为A
+        ina219_voltage = data[0] << 8 | data[1];
+        ina219_current = data[2] << 8 | data[3];
+        ina219_voltage /= 1000.0;
+        ina219_current /= 1000.0;
 
         switch (value) {
             case INA219_state.INA219_voltage:
-                return ina219_voltage; // 返回电压值
+                return ina219_voltage;
             case INA219_state.INA219_current:
-                return ina219_current; // 返回电流值
+                return ina219_current;
+            case INA219_state.INA219_power:
+                return ina219_voltage * ina219_current;
         }
     }
 }
