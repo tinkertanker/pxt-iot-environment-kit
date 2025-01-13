@@ -447,7 +447,14 @@ namespace Environment {
         let time = input.runningTimeMicros() + us;
         while (input.runningTimeMicros() < time);
     }
-
+    function waitDigitalReadPin(state: number, timeout: number, pin: DigitalPin) {
+        while (pins.digitalReadPin(pin) != state) {
+            if (!(--timeout)) {
+                return 0
+            }
+        };
+        return 1
+    }
 
     let __dht11_last_read_time = 0;
     let __temperature: number = 0
