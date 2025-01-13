@@ -1002,7 +1002,7 @@ namespace Environment {
     let ina219_current = 0.0;
 
     function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
-        let overtimr = 0; 
+        let overtimr = 0;
 
         pins.setPull(pin, PinPullMode.PullNone);
         pins.digitalWritePin(pin, 1);
@@ -1016,10 +1016,10 @@ namespace Environment {
         while (pins.digitalReadPin(pin) === 1 && overtimr++ < 20000) {
         }
         if (pins.digitalReadPin(pin) === 0) {
-            basic.pause(5); 
+            basic.pause(5);
             if (pins.digitalReadPin(pin) === 0) {
-                basic.pause(7); 
-                if (pins.digitalReadPin(pin) === 1) { 
+                basic.pause(7);
+                if (pins.digitalReadPin(pin) === 1) {
                     return 0;
                 }
                 else {
@@ -1067,33 +1067,32 @@ namespace Environment {
     export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
         basic.pause(50);
         let data = [0, 0, 0, 0, 0];
+        let readcnt = 3;
+        while (readcnt--) {
+            let result = ina219_send_start_signal_and_wait_response(ina219pin);
+            if (result !== 0) {
+                basic.pause(10);
+                continue;
+                switch (value) {
+                    case INA219_state.INA219_voltage:
+                        return ina219_voltage;
+                    case INA219_state.INA219_current:
+                        return ina219_current;
+                    case INA219_state.INA219_power:
+                        return ina219_voltage * ina219_current;
+                }
+            }
 
-        let result = ina219_send_start_signal_and_wait_response(ina219pin);
-        if (result !== 0) {
+            for (let i = 0; i < 5; i++) {
+                data[i] = ina219_read_byte(ina219pin);
+            }
+
+            if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
+                break;
+            }
+        }
+        if (readcnt <= 0) {
             return 0;
-            switch (value) {
-                case INA219_state.INA219_voltage:
-                    return ina219_voltage;
-                case INA219_state.INA219_current:
-                    return ina219_current;
-                case INA219_state.INA219_power:
-                    return ina219_voltage * ina219_current;
-            }
-        }
-
-        for (let i = 0; i < 5; i++) {
-            data[i] = ina219_read_byte(ina219pin);
-        }
-
-        if (data[4] != ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
-            switch (value) {
-                case INA219_state.INA219_voltage:
-                    return ina219_voltage;
-                case INA219_state.INA219_current:
-                    return ina219_current;
-                case INA219_state.INA219_power:
-                    return ina219_voltage * ina219_current;
-            }
         }
 
         ina219_voltage = data[0] << 8 | data[1];
