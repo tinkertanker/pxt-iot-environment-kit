@@ -1070,6 +1070,7 @@ namespace Environment {
 
         let result = ina219_send_start_signal_and_wait_response(ina219pin);
         if (result !== 0) {
+            return 0;
             switch (value) {
                 case INA219_state.INA219_voltage:
                     return ina219_voltage;
