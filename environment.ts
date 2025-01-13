@@ -534,6 +534,7 @@ namespace Environment {
                 return __humidity
             default:
                 return 0
+        }
     }
 
     /**
