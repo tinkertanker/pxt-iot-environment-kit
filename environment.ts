@@ -1070,6 +1070,7 @@ namespace Environment {
     }
 
     //% block="INA219 sensor on %ina219pin read %value"
+    //% value.defl()=INA219_voltagema
     export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
         basic.pause(50);
         let data = [0, 0, 0, 0, 0];
