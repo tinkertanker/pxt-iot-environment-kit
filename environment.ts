@@ -119,13 +119,19 @@ namespace Environment {
     }
 
     export enum INA219_state {
-        //% block="voltage(V)" enumval=0
+        //% block="voltage(MV)" enumval=0
+        INA219_voltagemv,
+
+        //% block="voltage(V)" enumval=1
         INA219_voltage,
 
-        //% block="current(A)" enumval=1
+        //% block="current(MA)" enumval=2
+        INA219_currentma,
+
+        //% block="current(A)" enumval=3
         INA219_current,
 
-        //% block="power(W)" enumval=2
+        //% block="power(W)" enumval=4
         INA219_power,
     }
 
@@ -1097,16 +1103,20 @@ namespace Environment {
 
         ina219_voltage = data[0] << 8 | data[1];
         ina219_current = data[2] << 8 | data[3];
-        ina219_voltage /= 1000.0;
-        ina219_current /= 1000.0;
+
+
 
         switch (value) {
-            case INA219_state.INA219_voltage:
+            case INA219_state.INA219_voltagemv:
                 return ina219_voltage;
-            case INA219_state.INA219_current:
+            case INA219_state.INA219_voltage:
+                return ina219_voltage /= 1000.0;
+            case INA219_state.INA219_currentma:
                 return ina219_current;
+            case INA219_state.INA219_current:
+                return ina219_current /= 1000.0;
             case INA219_state.INA219_power:
-                return ina219_voltage * ina219_current;
+                return ina219_voltage / 1000.0 * ina219_current / 1000.0;
         }
     }
 }
