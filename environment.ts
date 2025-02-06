@@ -1074,11 +1074,11 @@ namespace Environment {
     export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
         basic.pause(50);
         let data = [0, 0, 0, 0, 0];
-        let readcnt = 1;
+        let readcnt = 2;
         while (readcnt--) {
             let result = ina219_send_start_signal_and_wait_response(ina219pin);
             if (result !== 0) {
-                basic.pause(10);
+                basic.pause(50);
                 continue;
                 switch (value) {
                     case INA219_state.INA219_voltage:
@@ -1098,7 +1098,7 @@ namespace Environment {
                 break;
             }
         }
-        if (readcnt < 0) {
+        if (readcnt <= 0) {
             return 0;
         }
 
