@@ -1074,7 +1074,7 @@ namespace Environment {
     export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
         basic.pause(50);
         let data = [0, 0, 0, 0, 0];
-        let readcnt = 2;
+        let readcnt = 5;
         while (readcnt--) {
             let result = ina219_send_start_signal_and_wait_response(ina219pin);
             if (result !== 0) {
