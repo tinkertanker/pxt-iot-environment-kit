@@ -1077,6 +1077,8 @@ namespace Environment {
         let readcnt = 5;
         while (readcnt--) {
             let result = ina219_send_start_signal_and_wait_response(ina219pin);
+            serial.writeNumber(99)
+            serial.writeNumber(result)
             if (result !== 0) {
                 basic.pause(50);
                 continue;
@@ -1104,8 +1106,6 @@ namespace Environment {
 
         ina219_voltage = data[0] << 8 | data[1];
         ina219_current = data[2] << 8 | data[3];
-
-
 
         switch (value) {
             case INA219_state.INA219_voltagemv:
