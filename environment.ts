@@ -1098,7 +1098,7 @@ namespace Environment {
                 break;
             }
         }
-        if (readcnt <= 0) {
+        if (readcnt < 0) {
             return 0;
         }
 
