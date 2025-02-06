@@ -1077,8 +1077,6 @@ namespace Environment {
         let readcnt = 5;
         while (readcnt--) {
             let result = ina219_send_start_signal_and_wait_response(ina219pin);
-            serial.writeNumber(99)
-            serial.writeNumber(result)
             if (result !== 0) {
                 basic.pause(20);
                 continue;
