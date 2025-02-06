@@ -1019,7 +1019,7 @@ namespace Environment {
         basic.pause(10);
 
         pins.setPull(pin, PinPullMode.PullUp);
-        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 20000) {
+        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 50000) {
         }
         if (pins.digitalReadPin(pin) === 0) {
             basic.pause(5);
