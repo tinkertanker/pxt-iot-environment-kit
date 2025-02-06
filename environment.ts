@@ -1097,9 +1097,9 @@ namespace Environment {
             if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
                 break;
             }
-        }
-        if (readcnt <= 0) {
-            return 0;
+            if (readcnt <= 0) {
+                return 0;
+            }
         }
 
         ina219_voltage = data[0] << 8 | data[1];
