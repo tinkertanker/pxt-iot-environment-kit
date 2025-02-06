@@ -1019,7 +1019,7 @@ namespace Environment {
         basic.pause(10);
 
         pins.setPull(pin, PinPullMode.PullUp);
-        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 50000) {
+        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 20000) {
         }
         if (pins.digitalReadPin(pin) === 0) {
             basic.pause(5);
@@ -1080,7 +1080,7 @@ namespace Environment {
             serial.writeNumber(99)
             serial.writeNumber(result)
             if (result !== 0) {
-                basic.pause(50);
+                basic.pause(20);
                 continue;
                 switch (value) {
                     case INA219_state.INA219_voltage:
