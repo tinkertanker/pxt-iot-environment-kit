@@ -1024,13 +1024,9 @@ namespace Environment {
         if (pins.digitalReadPin(pin) === 0) {
             basic.pause(5);
             if (pins.digitalReadPin(pin) === 0) {
-                basic.pause(7);
-                if (pins.digitalReadPin(pin) === 1) {
-                    return 0;
+                while (pins.digitalReadPin(pin) === 0 && overtimr++ < 20000) {
                 }
-                else {
-                    return 3;
-                }
+                return 0;
             }
             else {
                 return 2;
@@ -1045,7 +1041,6 @@ namespace Environment {
         for (let i = 1; i <= 8; i++) {
             byte |= ina219_read_bit(pin) << 8 - i;
         }
-
         return byte;
     }
 
@@ -1053,9 +1048,8 @@ namespace Environment {
         let bit = 0;
 
         pins.setPull(pin, PinPullMode.PullUp);
+
         let overtimr = 0;
-
-
         while (pins.digitalReadPin(pin) === 1 && overtimr++ < 10000) {
         }
         overtimr = 0;
@@ -1080,14 +1074,6 @@ namespace Environment {
             if (result !== 0) {
                 basic.pause(20);
                 continue;
-                switch (value) {
-                    case INA219_state.INA219_voltage:
-                        return ina219_voltage;
-                    case INA219_state.INA219_current:
-                        return ina219_current;
-                    case INA219_state.INA219_power:
-                        return ina219_voltage * ina219_current;
-                }
             }
 
             for (let i = 0; i < 5; i++) {
