@@ -483,7 +483,7 @@ namespace Environment {
         let fail_flag: number = 0
         let pin = dht11pin
         pins.setPull(pin, PinPullMode.PullUp)
-        for (let count = 0; count < (__dht11_last_read_time == 0 ? 50 : 10); count++) {
+        for (let count = 0; count < (__dht11_last_read_time == 0 ? 20 : 10); count++) {
             if (count != 0) {
                 basic.pause(5);
             }
