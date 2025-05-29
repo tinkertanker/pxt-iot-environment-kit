@@ -40,6 +40,7 @@
   "Environment.writeData|block": "RFID 传感器 IIC接口 将数据 %data 写入卡",
   "Environment.checkCard|block": "RFID 传感器 IIC接口 检测到卡片",
   "Environment.INA219_read_value|block": "能源监测传感器 %ina219pin 读取 %value 值",
+  "Environment.doubleTrackingValue|block": "双路巡线传感器 左%pin1 右%pin2 识别到 %state",
   "Environment|block": "八爪鱼环境模块",
   "{id:category}Environment": "八爪鱼环境模块"
 }

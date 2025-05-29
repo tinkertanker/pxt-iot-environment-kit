@@ -135,6 +135,20 @@ namespace Environment {
         INA219_power,
     }
 
+    export enum TrackingStateType {
+        //% block="● ●" enumval=0
+        Tracking_State_0,
+
+        //% block="● ◌" enumval=1
+        Tracking_State_1,
+
+        //% block="◌ ●" enumval=2
+        Tracking_State_2,
+
+        //% block="◌ ◌" enumval=3
+        Tracking_State_3
+    }
+
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
         buf[0] = reg;
@@ -1101,6 +1115,25 @@ namespace Environment {
             case INA219_state.INA219_power:
                 return ina219_voltage / 1000.0 * ina219_current / 1000.0;
         }
+    }
+
+    //% block="Line-tracking senor on lift %pin1 and right %pin2 to identifying %state"
+    export function doubleTrackingValue(pin1: DigitalPin, pin2: DigitalPin,state:TrackingStateType): Boolean {
+        let lpin = pin1;
+        let rpin = pin2;
+        pins.setPull(lpin, PinPullMode.PullUp)
+        pins.setPull(rpin, PinPullMode.PullUp)
+        let lsensor = pins.digitalReadPin(lpin)
+        let rsensor = pins.digitalReadPin(rpin)
+        if (lsensor == 0 && rsensor == 0 && state == TrackingStateType.Tracking_State_0) {
+            return true;
+        } else if (lsensor == 0 && rsensor == 1 && state == TrackingStateType.Tracking_State_1) {
+            return true;
+        } else if (lsensor == 1 && rsensor == 0 && state == TrackingStateType.Tracking_State_2) {
+            return true;
+        } else if (lsensor == 1 && rsensor == 1 && state == TrackingStateType.Tracking_State_3) {
+            return true;
+        } else return false;
     }
 }
 
