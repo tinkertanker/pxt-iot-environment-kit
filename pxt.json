@@ -14,7 +14,8 @@
         "environment.ts",
         "README.md",
         "_locales/zh/Environment-and-Science-IoT-strings.json",
-        "_locales/zh-TW/Environment-and-Science-IoT-strings.json"
+        "_locales/zh-TW/Environment-and-Science-IoT-strings.json",
+        "_locales/pl/Environment-and-Science-IoT-strings.json"
     ],
     "testFiles": [
         "tests.ts"
