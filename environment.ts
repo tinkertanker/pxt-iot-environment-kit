@@ -118,6 +118,36 @@ namespace Environment {
         BME280_altitude,
     }
 
+    export enum INA219_state {
+        //% block="voltage(MV)" enumval=0
+        INA219_voltagemv,
+
+        //% block="voltage(V)" enumval=1
+        INA219_voltage,
+
+        //% block="current(MA)" enumval=2
+        INA219_currentma,
+
+        //% block="current(A)" enumval=3
+        INA219_current,
+
+        //% block="power(W)" enumval=4
+        INA219_power,
+    }
+
+    export enum TrackingStateType {
+        //% block="● ●" enumval=0
+        Tracking_State_0,
+
+        //% block="● ◌" enumval=1
+        Tracking_State_1,
+
+        //% block="◌ ●" enumval=2
+        Tracking_State_2,
+
+        //% block="◌ ◌" enumval=3
+        Tracking_State_3
+    }
 
     function setreg(reg: number, dat: number): void {
         let buf = pins.createBuffer(2);
@@ -986,6 +1016,124 @@ namespace Environment {
         return true;
     }
 
+    let ina219_voltage = 0.0;
+    let ina219_current = 0.0;
 
+    function ina219_send_start_signal_and_wait_response(pin: DigitalPin): number {
+        let overtimr = 0;
+
+        pins.setPull(pin, PinPullMode.PullNone);
+        pins.digitalWritePin(pin, 1);
+
+        pins.digitalWritePin(pin, 0);
+        basic.pause(10);
+        pins.digitalWritePin(pin, 1);
+        basic.pause(10);
+
+        pins.setPull(pin, PinPullMode.PullUp);
+        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 20000) {
+        }
+        if (pins.digitalReadPin(pin) === 0) {
+            basic.pause(5);
+            if (pins.digitalReadPin(pin) === 0) {
+                while (pins.digitalReadPin(pin) === 0 && overtimr++ < 20000) {
+                }
+                return 0;
+            }
+            else {
+                return 2;
+            }
+        }
+        return 1;
+    }
+
+    function ina219_read_byte(pin: DigitalPin): number {
+        let byte = 0;
+
+        for (let i = 1; i <= 8; i++) {
+            byte |= ina219_read_bit(pin) << 8 - i;
+        }
+        return byte;
+    }
+
+    function ina219_read_bit(pin: DigitalPin): number {
+        let bit = 0;
+
+        pins.setPull(pin, PinPullMode.PullUp);
+
+        let overtimr = 0;
+        while (pins.digitalReadPin(pin) === 1 && overtimr++ < 10000) {
+        }
+        overtimr = 0;
+        while (pins.digitalReadPin(pin) === 0 && overtimr++ < 10000) {
+        }
+
+        control.waitMicros(150);
+
+        bit = pins.digitalReadPin(pin);
+
+        return bit;
+    }
+
+    //% block="INA219 sensor on %ina219pin read %value"
+    //% value.defl(INA219_state.INA219_currentma)
+    export function INA219_read_value(ina219pin: DigitalPin, value: INA219_state): number {
+        basic.pause(50);
+        let data = [0, 0, 0, 0, 0];
+        let readcnt = 10;
+        while (readcnt--) {
+            let result = ina219_send_start_signal_and_wait_response(ina219pin);
+            if (result !== 0) {
+                basic.pause(20);
+                continue;
+            }
+
+            for (let i = 0; i < 5; i++) {
+                data[i] = ina219_read_byte(ina219pin);
+            }
+
+            if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xff)) {
+                break;
+            }
+            if (readcnt <= 0) {
+                return 0;
+            }
+        }
+
+        ina219_voltage = data[0] << 8 | data[1];
+        ina219_current = data[2] << 8 | data[3];
+
+        switch (value) {
+            case INA219_state.INA219_voltagemv:
+                return ina219_voltage;
+            case INA219_state.INA219_voltage:
+                return ina219_voltage /= 1000.0;
+            case INA219_state.INA219_currentma:
+                return ina219_current;
+            case INA219_state.INA219_current:
+                return ina219_current /= 1000.0;
+            case INA219_state.INA219_power:
+                return ina219_voltage / 1000.0 * ina219_current / 1000.0;
+        }
+    }
+
+    //% block="Line-tracking senor on lift %pin1 and right %pin2 to identifying %state"
+    export function doubleTrackingValue(pin1: DigitalPin, pin2: DigitalPin,state:TrackingStateType): Boolean {
+        let lpin = pin1;
+        let rpin = pin2;
+        pins.setPull(lpin, PinPullMode.PullUp)
+        pins.setPull(rpin, PinPullMode.PullUp)
+        let lsensor = pins.digitalReadPin(lpin)
+        let rsensor = pins.digitalReadPin(rpin)
+        if (lsensor == 0 && rsensor == 0 && state == TrackingStateType.Tracking_State_0) {
+            return true;
+        } else if (lsensor == 0 && rsensor == 1 && state == TrackingStateType.Tracking_State_1) {
+            return true;
+        } else if (lsensor == 1 && rsensor == 0 && state == TrackingStateType.Tracking_State_2) {
+            return true;
+        } else if (lsensor == 1 && rsensor == 1 && state == TrackingStateType.Tracking_State_3) {
+            return true;
+        } else return false;
+    }
 }
 
