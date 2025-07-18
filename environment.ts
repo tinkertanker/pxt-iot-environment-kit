@@ -1117,7 +1117,7 @@ namespace Environment {
         }
     }
 
-    //% block="Line-tracking senor on lift %pin1 and right %pin2 to identifying %state"
+    //% block="Line-tracking senor on S1 %pin1 and S2 %pin2 to identifying %state"
     export function doubleTrackingValue(pin1: DigitalPin, pin2: DigitalPin,state:TrackingStateType): Boolean {
         let lpin = pin1;
         let rpin = pin2;
