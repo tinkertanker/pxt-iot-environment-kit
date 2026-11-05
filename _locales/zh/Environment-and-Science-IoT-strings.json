@@ -18,6 +18,7 @@
   "Environment.INA219_state.INA219_power|block": "功率(W)",
   "Environment.Ds18b20Temp|block": "DS18B20 温度传感器 %state 连接至 %pin",
   "Environment.PIR|block": "人体红外传感器 %pin 监测到移动",
+  "Environment.ReadCO2Concentration|block": "连接至 %CO2concentrationpin 的二氧化碳浓度值(0~1023)",
   "Environment.ReadDust|block": "连接至 LED %vLED| out %vo 的灰尘量(μg/m³)",
   "Environment.ReadLightIntensity|block": "连接至 %lightintensitypin 的光线值(0~100)",
   "Environment.ReadNoise|block": "连接至 %noisepin 的噪音值(dB)",

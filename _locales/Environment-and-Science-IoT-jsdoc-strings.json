@@ -1,6 +1,8 @@
 {
   "Environment": "Custom blocks",
   "Environment.PIR": "TODO: Detect soil moisture value(0~100%)",
+  "Environment.ReadCO2Concentration": "Read the relative CO2 concentration value (0~1023).",
+  "Environment.ReadCO2Concentration|param|CO2concentrationpin": "analog pin connected to the CO2 sensor signal output, eg: AnalogPin.P1",
   "Environment.ReadDust": "get dust value (μg/m³)",
   "Environment.ReadDust|param|vLED": "describe parameter here, eg: DigitalPin.P16",
   "Environment.ReadDust|param|vo": "describe parameter here, eg: AnalogPin.P1",

@@ -684,6 +684,16 @@ namespace Environment {
     }
 
     /**
+     * Read the relative CO2 concentration value (0~1023).
+     * @param CO2concentrationpin analog pin connected to the CO2 sensor signal output, eg: AnalogPin.P1
+     */
+    //% blockId="CO2concentration" block="value of CO2 concentration(0~1023) at pin %CO2concentrationpin"
+    //% CO2concentrationpin.defl=AnalogPin.P1
+    export function ReadCO2Concentration(CO2concentrationpin: AnalogPin): number {
+        return 1023 - pins.analogReadPin(CO2concentrationpin)
+    }
+
+    /**
      * get light intensity value (0~100)
      * @param lightintensitypin describe parameter here
      */
