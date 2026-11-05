@@ -2,7 +2,7 @@
   "Environment": "Custom blocks",
   "Environment.PIR": "TODO: Detect soil moisture value(0~100%)",
   "Environment.ReadCO2Concentration": "读取二氧化碳相对浓度值（0~1023）。",
-  "Environment.ReadCO2Concentration|param|CO2concentrationpin": "连接二氧化碳传感器信号输出的模拟引脚，例如：AnalogPin.P1",
+  "Environment.ReadCO2Concentration|param|CO2concentrationpin": "连接二氧化碳传感器信号输出的模拟引脚，例如：AnalogPin.P0",
   "Environment.ReadDust": "get dust value (μg/m³)",
   "Environment.ReadDust|param|vLED": "describe parameter here, eg: DigitalPin.P16",
   "Environment.ReadDust|param|vo": "describe parameter here, eg: AnalogPin.P1",
