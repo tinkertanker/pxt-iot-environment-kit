@@ -5,6 +5,7 @@
     "Environment.octopus_BME280|block": "BME280感測器 的 %state 值",
     "Environment.ReadPM25|block": "連接至 %pm25pin 的 pm2.5(μg/m³) 值",
     "Environment.ReadSoilHumidity|block": "連接至 %soilhumiditypin 的土壤濕度值(0~100)",
+    "Environment.ReadCO2Concentration|block": "連接至 %CO2concentrationpin 的二氧化碳濃度值(0~1023)",
     "Environment.Distance_Unit_List.Distance_Unit_inch|block": "英吋",
     "Environment.ReadDust|block": "連接至 LED %vLED| out %vo 的灰塵量(μg/m³)",
     "Environment.sonarbit_distance|block": "超聲波測距單位 %distance_unit |連接至 %pin 的距離值",

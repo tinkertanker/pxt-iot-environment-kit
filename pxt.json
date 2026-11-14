@@ -14,6 +14,7 @@
     "files": [
         "environment.ts",
         "README.md",
+        "_locales/Environment-and-Science-IoT-jsdoc-strings.json",
         "_locales/zh/Environment-and-Science-IoT-strings.json",
         "_locales/zh-TW/Environment-and-Science-IoT-strings.json",
         "_locales/pl/Environment-and-Science-IoT-strings.json"

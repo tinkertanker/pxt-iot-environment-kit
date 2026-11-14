@@ -19,6 +19,7 @@
     "Environment.ReadPM25|block": "poziom pm2.5(μg/m³) pin %pm25pin",
     "Environment.ReadPM10|block": "poziom pm10(μg/m³) pin %pm10pin",
     "Environment.ReadSoilHumidity|block": "poziom wilgotności gleby(0~100) pin %soilhumiditypin",
+    "Environment.ReadCO2Concentration|block": "poziom stężenia CO2(0~1023) pin %CO2concentrationpin",
     "Environment.ReadLightIntensity|block": "poziom natężenia światła(0~100) pin %lightintensitypin",
     "Environment.ReadWaterLevel|block": "poziom wody(0~100) pin %waterlevelpin",
     "Environment.ReadWindSpeed|block": "prędkość wiatru(m/s) pin %windspeedpin",
